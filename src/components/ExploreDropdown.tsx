@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Zap, TrendingUp, Shield, Link2, Coins, BarChart3 } from "lucide-react";
 
@@ -31,7 +31,7 @@ const ExploreDropdown = () => {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full left-0 mt-2 w-56 z-20 bg-background/95 backdrop-blur-lg border border-border rounded-lg shadow-xl animate-fade-in">
+          <div className="absolute top-full left-0 mt-2 w-56 z-50 bg-background border border-border rounded-lg shadow-xl animate-fade-in">
             <div className="py-2">
               {exploreItems.map((item, index) => {
                 const Icon = item.icon;
