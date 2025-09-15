@@ -127,7 +127,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-border animate-fade-in">
           <div className="flex items-center space-x-6 mb-4 md:mb-0">
             <p className="text-sm text-muted-foreground">
-              © 2024 Liquid Chain. All rights reserved.
+              © 2025 Liquid Chain. All rights reserved.
             </p>
           </div>
           <div className="flex items-center space-x-6">

@@ -6,12 +6,12 @@ const ExploreDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const exploreItems = [
-    { icon: Zap, label: "Technology", href: "#technology" },
-    { icon: TrendingUp, label: "Features", href: "#features" },
-    { icon: Shield, label: "Security", href: "#security" },
-    { icon: Link2, label: "Cross-Chain", href: "#cross-chain" },
-    { icon: Coins, label: "Tokenomics", href: "#tokenomics" },
-    { icon: BarChart3, label: "Analytics", href: "#analytics" },
+    { icon: Zap, label: "Technology", href: "/technology" },
+    { icon: TrendingUp, label: "Features", href: "/features" },
+    { icon: Shield, label: "Security", href: "/security" },
+    { icon: Link2, label: "Cross-Chain", href: "/cross-chain" },
+    { icon: Coins, label: "Tokenomics", href: "/tokenomics" },
+    { icon: BarChart3, label: "Analytics", href: "/analytics" },
   ];
 
   return (
