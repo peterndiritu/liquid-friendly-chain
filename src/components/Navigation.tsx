@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import liquidChainLogo from "@/assets/liquid-chain-logo.png";
+import ExploreDropdown from "./ExploreDropdown";
 
 const Navigation = () => {
   return (
@@ -18,9 +19,7 @@ const Navigation = () => {
         </div>
         
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" className="text-foreground hover:text-primary">
-            Explore
-          </Button>
+          <ExploreDropdown />
           <Button className="button-glow animate-glow-pulse">
             Buy LQD
           </Button>
