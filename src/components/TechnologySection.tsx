@@ -110,7 +110,7 @@ const TechnologySection = () => {
             Ready to Experience the Future?
           </h3>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of developers and users building the next generation of decentralized applications on Liquid Chain.
+            Join thousands of developers and users building the next generation of decentralized applications on Fluid Network.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="button-glow animate-glow-pulse">

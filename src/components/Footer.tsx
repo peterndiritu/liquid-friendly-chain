@@ -41,7 +41,7 @@ const Footer = () => {
           <div className="text-center max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold mb-4 gradient-text">Stay Updated</h3>
             <p className="text-muted-foreground mb-6">
-              Get the latest updates on Liquid Chain development, partnerships, and ecosystem growth.
+              Get the latest updates on Fluid Network development, partnerships, and ecosystem growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <div className="flex-1">
@@ -64,10 +64,10 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2 animate-fade-in">
             <div className="flex items-center space-x-3 mb-6">
-              <img src={liquidChainLogo} alt="Liquid Chain" className="w-12 h-12" />
+              <img src={liquidChainLogo} alt="Fluid Network" className="w-12 h-12" />
               <div>
-                <h3 className="text-xl font-bold gradient-text">Liquid Chain</h3>
-                <p className="text-sm text-muted-foreground">LQD Token</p>
+                <h3 className="text-xl font-bold gradient-text">Fluid Network</h3>
+                <p className="text-sm text-muted-foreground">FLD Token</p>
               </div>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md leading-relaxed">
@@ -127,7 +127,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-border animate-fade-in">
           <div className="flex items-center space-x-6 mb-4 md:mb-0">
             <p className="text-sm text-muted-foreground">
-              © 2025 Liquid Chain. All rights reserved.
+              © 2025 Fluid Network. All rights reserved.
             </p>
           </div>
           <div className="flex items-center space-x-6">

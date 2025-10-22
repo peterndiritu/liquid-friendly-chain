@@ -55,7 +55,7 @@ const Technology = () => {
               <span className="gradient-text">Technology</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8">
-              Discover the cutting-edge blockchain technology powering Liquid Chain's revolutionary ecosystem
+              Discover the cutting-edge blockchain technology powering Fluid Network's revolutionary ecosystem
             </p>
             <Button size="lg" className="button-glow animate-glow-pulse">
               Technical Whitepaper

@@ -16,10 +16,10 @@ const HeroSection = () => {
         {/* Main Heading */}
         <div className="space-y-4 animate-fade-in">
           <h1 className="text-6xl md:text-8xl font-bold">
-            <span className="gradient-text">Liquid Chain</span>
+            <span className="gradient-text">Fluid Network</span>
           </h1>
           <p className="text-2xl md:text-3xl font-light text-muted-foreground">
-            (LQD)
+            (FLD)
           </p>
         </div>
 
@@ -36,7 +36,7 @@ const HeroSection = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 animate-scale-in">
           <Button size="lg" className="button-glow animate-glow-pulse px-8 py-4 text-lg">
-            Buy LQD Tokens
+            Buy FLD Tokens
           </Button>
           <Button size="lg" variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 px-8 py-4 text-lg">
             Claim Airdrop
@@ -57,7 +57,7 @@ const HeroSection = () => {
           </Card>
           <Card className="card-glow p-6 text-center">
             <div className="text-3xl font-bold gradient-text">10M</div>
-            <p className="text-sm text-muted-foreground mt-2">Total LQD Supply</p>
+            <p className="text-sm text-muted-foreground mt-2">Total FLD Supply</p>
           </Card>
           <Card className="card-glow p-6 text-center">
             <div className="text-3xl font-bold gradient-text">Multi-Chain</div>

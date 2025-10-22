@@ -9,19 +9,19 @@ const Navigation = () => {
         <div className="flex items-center space-x-3">
           <img 
             src={liquidChainLogo} 
-            alt="Liquid Chain Logo" 
+            alt="Fluid Network Logo" 
             className="w-10 h-10 animate-float"
           />
           <div>
-            <h1 className="text-xl font-bold gradient-text">Liquid Chain</h1>
-            <p className="text-xs text-muted-foreground">LQD Token</p>
+            <h1 className="text-xl font-bold gradient-text">Fluid Network</h1>
+            <p className="text-xs text-muted-foreground">FLD Token</p>
           </div>
         </div>
         
         <div className="flex items-center space-x-4">
           <ExploreDropdown />
           <Button className="button-glow animate-glow-pulse">
-            Buy LQD
+            Buy FLD
           </Button>
         </div>
       </div>

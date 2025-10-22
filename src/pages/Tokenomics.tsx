@@ -17,13 +17,13 @@ import {
 
 const Tokenomics = () => {
   const tokenDistribution = [
-    { category: "Public Sale", percentage: 25, amount: "2.5M LQD", color: "bg-blue-500" },
-    { category: "Team & Advisors", percentage: 20, amount: "2M LQD", color: "bg-green-500" },
-    { category: "Development", percentage: 15, amount: "1.5M LQD", color: "bg-purple-500" },
-    { category: "Marketing", percentage: 10, amount: "1M LQD", color: "bg-yellow-500" },
-    { category: "Reserve Fund", percentage: 15, amount: "1.5M LQD", color: "bg-red-500" },
-    { category: "Community Rewards", percentage: 10, amount: "1M LQD", color: "bg-indigo-500" },
-    { category: "Liquidity Mining", percentage: 5, amount: "500K LQD", color: "bg-pink-500" }
+    { category: "Public Sale", percentage: 25, amount: "2.5M FLD", color: "bg-blue-500" },
+    { category: "Team & Advisors", percentage: 20, amount: "2M FLD", color: "bg-green-500" },
+    { category: "Development", percentage: 15, amount: "1.5M FLD", color: "bg-purple-500" },
+    { category: "Marketing", percentage: 10, amount: "1M FLD", color: "bg-yellow-500" },
+    { category: "Reserve Fund", percentage: 15, amount: "1.5M FLD", color: "bg-red-500" },
+    { category: "Community Rewards", percentage: 10, amount: "1M FLD", color: "bg-indigo-500" },
+    { category: "Liquidity Mining", percentage: 5, amount: "500K FLD", color: "bg-pink-500" }
   ];
 
   const stakingRewards = [
@@ -37,7 +37,7 @@ const Tokenomics = () => {
     {
       icon: Zap,
       title: "Transaction Fees",
-      description: "LQD tokens are used to pay for all network transaction fees with discounted rates for holders."
+      description: "FLD tokens are used to pay for all network transaction fees with discounted rates for holders."
     },
     {
       icon: Shield,
@@ -62,7 +62,7 @@ const Tokenomics = () => {
     {
       icon: Lock,
       title: "Collateral",
-      description: "Use LQD as collateral for lending, borrowing, and other DeFi applications within the ecosystem."
+      description: "Use FLD as collateral for lending, borrowing, and other DeFi applications within the ecosystem."
     }
   ];
 
@@ -77,11 +77,11 @@ const Tokenomics = () => {
               <span className="gradient-text">Tokenomics</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8">
-              Discover the economic model behind LQD token with sustainable rewards, governance rights, and ecosystem utility
+              Discover the economic model behind FLD token with sustainable rewards, governance rights, and ecosystem utility
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="button-glow animate-glow-pulse">
-                Buy LQD Tokens
+                Buy FLD Tokens
               </Button>
               <Button size="lg" variant="outline" className="border-primary/50 text-primary hover:bg-primary/10">
                 Economic Whitepaper
@@ -203,7 +203,7 @@ const Tokenomics = () => {
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-4 gradient-text">Staking Rewards</h2>
               <p className="text-xl text-muted-foreground">
-                Earn passive income by staking LQD tokens with flexible lock-up periods
+                Earn passive income by staking FLD tokens with flexible lock-up periods
               </p>
             </div>
 

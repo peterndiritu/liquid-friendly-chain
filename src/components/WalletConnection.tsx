@@ -72,7 +72,7 @@ const WalletConnection = () => {
             <span className="font-medium">Connect Wallet</span>
           </div>
           <p className="text-xs text-muted-foreground">
-            Connect to BSC network to interact with Liquid Chain
+            Connect to BSC network to interact with Fluid Network
           </p>
           <Button 
             className="w-full button-glow"

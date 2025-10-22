@@ -84,7 +84,7 @@ const Features = () => {
               <span className="gradient-text">Features</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8">
-              Explore the revolutionary features that make Liquid Chain the future of blockchain technology
+              Explore the revolutionary features that make Fluid Network the future of blockchain technology
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="button-glow animate-glow-pulse">
@@ -135,7 +135,7 @@ const Features = () => {
         <section className="py-20 px-6 bg-muted/20">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 gradient-text">Why Choose Liquid Chain?</h2>
+              <h2 className="text-4xl font-bold mb-4 gradient-text">Why Choose Fluid Network?</h2>
               <p className="text-xl text-muted-foreground">
                 See how we compare to traditional blockchain solutions
               </p>
@@ -147,7 +147,7 @@ const Features = () => {
                   <thead className="bg-primary/10">
                     <tr>
                       <th className="text-left p-6 font-semibold">Feature</th>
-                      <th className="text-center p-6 font-semibold text-primary">Liquid Chain</th>
+                      <th className="text-center p-6 font-semibold text-primary">Fluid Network</th>
                       <th className="text-center p-6 font-semibold text-muted-foreground">Traditional Blockchains</th>
                     </tr>
                   </thead>

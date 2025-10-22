@@ -72,7 +72,7 @@ const FeaturesSection = () => {
             Core <span className="gradient-text">Features</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Liquid Chain combines cutting-edge blockchain technology with innovative features to create the most advanced decentralized ecosystem.
+            Fluid Network combines cutting-edge blockchain technology with innovative features to create the most advanced decentralized ecosystem.
           </p>
         </div>
 
