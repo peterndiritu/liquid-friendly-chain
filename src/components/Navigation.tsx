@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import liquidChainLogo from "@/assets/liquid-chain-logo.png";
 import ExploreDropdown from "./ExploreDropdown";
+import { ConnectButton } from "thirdweb/react";
+import { client, chain } from "@/lib/thirdweb";
 
 const Navigation = () => {
   return (
@@ -20,6 +22,14 @@ const Navigation = () => {
         
         <div className="flex items-center space-x-4">
           <ExploreDropdown />
+          <ConnectButton
+            client={client}
+            chain={chain}
+            connectModal={{
+              size: "compact",
+            }}
+            theme="dark"
+          />
           <Button className="button-glow animate-glow-pulse">
             Buy FLD
           </Button>

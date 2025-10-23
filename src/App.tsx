@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { ThirdwebProvider } from "thirdweb/react";
 import LoadingScreen from "@/components/LoadingScreen";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -29,26 +30,28 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <LoadingScreen isLoading={isLoading} />
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/technology" element={<Technology />} />
-            <Route path="/features" element={<Features />} />
-            <Route path="/security" element={<Security />} />
-            <Route path="/cross-chain" element={<CrossChain />} />
-            <Route path="/tokenomics" element={<Tokenomics />} />
-            <Route path="/analytics" element={<Analytics />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ThirdwebProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <LoadingScreen isLoading={isLoading} />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/technology" element={<Technology />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/security" element={<Security />} />
+              <Route path="/cross-chain" element={<CrossChain />} />
+              <Route path="/tokenomics" element={<Tokenomics />} />
+              <Route path="/analytics" element={<Analytics />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ThirdwebProvider>
   );
 };
 
