@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
@@ -14,8 +15,31 @@ import {
   PieChart,
   BarChart3
 } from "lucide-react";
+import PurchaseModal from "@/components/PurchaseModal";
+import { useWalletStatus } from "@/hooks/useWalletStatus";
+import { useTokenPurchase } from "@/hooks/useTokenPurchase";
+import { useConnectModal } from "thirdweb/react";
+import { client } from "@/lib/thirdweb";
+import { toast } from "@/hooks/use-toast";
 
 const Tokenomics = () => {
+  const [purchaseModalOpen, setPurchaseModalOpen] = useState(false);
+  const { isConnected } = useWalletStatus();
+  const { buyTokens, isLoading: isPurchasing } = useTokenPurchase();
+  const { connect } = useConnectModal();
+
+  const handleBuyClick = () => {
+    if (!isConnected) {
+      toast({
+        title: "Connect Wallet",
+        description: "Please connect your wallet to purchase tokens",
+      });
+      connect({ client });
+      return;
+    }
+    setPurchaseModalOpen(true);
+  };
+
   const tokenDistribution = [
     { category: "Public Sale", percentage: 25, amount: "2.5M FLD", color: "bg-blue-500" },
     { category: "Team & Advisors", percentage: 20, amount: "2M FLD", color: "bg-green-500" },
@@ -80,7 +104,11 @@ const Tokenomics = () => {
               Discover the economic model behind FLD token with sustainable rewards, governance rights, and ecosystem utility
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="button-glow animate-glow-pulse">
+              <Button 
+                size="lg" 
+                className="button-glow animate-glow-pulse"
+                onClick={handleBuyClick}
+              >
                 Buy FLD Tokens
               </Button>
               <Button size="lg" variant="outline" className="border-primary/50 text-primary hover:bg-primary/10">
@@ -277,6 +305,13 @@ const Tokenomics = () => {
         </section>
       </main>
       <Footer />
+
+      <PurchaseModal
+        open={purchaseModalOpen}
+        onOpenChange={setPurchaseModalOpen}
+        onPurchase={buyTokens}
+        isLoading={isPurchasing}
+      />
     </div>
   );
 };
