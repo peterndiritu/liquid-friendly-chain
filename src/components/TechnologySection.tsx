@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { 
   ArrowRight,
   Code2,
@@ -11,6 +12,8 @@ import {
 } from "lucide-react";
 
 const TechnologySection = () => {
+  const navigate = useNavigate();
+  
   const techFeatures = [
     {
       icon: Code2,
@@ -113,11 +116,20 @@ const TechnologySection = () => {
             Join thousands of developers and users building the next generation of decentralized applications on Fluid Network.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="button-glow animate-glow-pulse">
+            <Button 
+              size="lg" 
+              className="button-glow animate-glow-pulse"
+              onClick={() => navigate('/start-building')}
+            >
               Start Building
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
-            <Button size="lg" variant="outline" className="border-primary/50 text-primary hover:bg-primary/10">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-primary/50 text-primary hover:bg-primary/10"
+              onClick={() => navigate('/resources')}
+            >
               View Documentation
             </Button>
           </div>

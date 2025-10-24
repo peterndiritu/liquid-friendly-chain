@@ -14,6 +14,11 @@ import Security from "./pages/Security";
 import CrossChain from "./pages/CrossChain";
 import Tokenomics from "./pages/Tokenomics";
 import Analytics from "./pages/Analytics";
+import Resources from "./pages/Resources";
+import Community from "./pages/Community";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import StartBuilding from "./pages/StartBuilding";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +50,11 @@ const App = () => {
               <Route path="/cross-chain" element={<CrossChain />} />
               <Route path="/tokenomics" element={<Tokenomics />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/start-building" element={<StartBuilding />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -13,24 +13,24 @@ import {
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Twitter, label: "Twitter", href: "#" },
-    { icon: Github, label: "GitHub", href: "#" },
-    { icon: MessageCircle, label: "Discord", href: "#" },
-    { icon: Send, label: "Telegram", href: "#" }
+    { icon: Twitter, label: "Twitter", href: "https://twitter.com/fluidnetwork" },
+    { icon: Github, label: "GitHub", href: "https://github.com/fluidnetwork" },
+    { icon: MessageCircle, label: "Discord", href: "https://discord.gg/fluidnetwork" },
+    { icon: Send, label: "Telegram", href: "https://t.me/fluidnetwork" }
   ];
 
   const quickLinks = [
-    { label: "Documentation", href: "#" },
-    { label: "Whitepaper", href: "#" },
-    { label: "API Reference", href: "#" },
-    { label: "Developer Tools", href: "#" }
+    { label: "Documentation", href: "/resources" },
+    { label: "Whitepaper", href: "/resources#whitepaper" },
+    { label: "API Reference", href: "/resources#api" },
+    { label: "Developer Tools", href: "/resources#tools" }
   ];
 
   const communityLinks = [
-    { label: "Community Forum", href: "#" },
-    { label: "Bug Bounty", href: "#" },
-    { label: "Brand Assets", href: "#" },
-    { label: "Media Kit", href: "#" }
+    { label: "Community Forum", href: "/community" },
+    { label: "Bug Bounty", href: "/community#bug-bounty" },
+    { label: "Brand Assets", href: "/community#brand-assets" },
+    { label: "Media Kit", href: "/community#media-kit" }
   ];
 
   return (
@@ -81,8 +81,11 @@ const Footer = () => {
                   size="sm"
                   variant="outline"
                   className="border-primary/30 hover:border-primary hover:bg-primary/10"
+                  asChild
                 >
-                  <social.icon className="w-4 h-4" />
+                  <a href={social.href} target="_blank" rel="noopener noreferrer">
+                    <social.icon className="w-4 h-4" />
+                  </a>
                 </Button>
               ))}
             </div>
@@ -131,10 +134,10 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex items-center space-x-6">
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a href="/privacy-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a href="/terms-of-service" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Terms of Service
             </a>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
