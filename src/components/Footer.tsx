@@ -20,6 +20,7 @@ const Footer = () => {
   ];
 
   const quickLinks = [
+    { label: "DEX", href: "/dex" },
     { label: "Documentation", href: "/resources" },
     { label: "Whitepaper", href: "/resources#whitepaper" },
     { label: "API Reference", href: "/resources#api" },

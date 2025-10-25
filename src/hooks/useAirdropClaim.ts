@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useActiveAccount } from "thirdweb/react";
 import { toast } from "@/hooks/use-toast";
+import { saveTransaction } from "@/lib/transactionStorage";
 
 export const useAirdropClaim = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +62,18 @@ export const useAirdropClaim = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setIsClaimed(true);
+      
+      // Save transaction to history
+      const txHash = '0x' + Math.random().toString(16).slice(2, 66); // Generate mock hash
+      saveTransaction({
+        hash: txHash,
+        type: 'claim',
+        amount: claimableAmount,
+        timestamp: Date.now(),
+        status: 'success',
+        from: '0x0000000000000000000000000000000000000000', // Airdrop contract
+        to: account.address,
+      }, account.address);
       
       toast({
         title: "Airdrop Claimed!",

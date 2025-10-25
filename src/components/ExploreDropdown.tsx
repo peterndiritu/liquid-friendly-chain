@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Zap, TrendingUp, Shield, Link2, Coins, BarChart3 } from "lucide-react";
+import { ChevronDown, Zap, TrendingUp, Shield, Link2, Coins, BarChart3, ArrowRightLeft } from "lucide-react";
 
 const ExploreDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const exploreItems = [
+    { icon: ArrowRightLeft, label: "DEX", href: "/dex" },
     { icon: Zap, label: "Technology", href: "/technology" },
     { icon: TrendingUp, label: "Features", href: "/features" },
     { icon: Shield, label: "Security", href: "/security" },

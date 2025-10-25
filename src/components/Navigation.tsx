@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import liquidChainLogo from "@/assets/liquid-chain-logo.png";
 import ExploreDropdown from "./ExploreDropdown";
@@ -9,12 +9,14 @@ import PurchaseModal from "./PurchaseModal";
 import { useWalletStatus } from "@/hooks/useWalletStatus";
 import { useTokenPurchase } from "@/hooks/useTokenPurchase";
 import { toast } from "@/hooks/use-toast";
+import { ArrowRightLeft } from "lucide-react";
 
 const Navigation = () => {
   const [purchaseModalOpen, setPurchaseModalOpen] = useState(false);
   const { isConnected } = useWalletStatus();
   const { buyTokens, isLoading: isPurchasing } = useTokenPurchase();
   const { connect } = useConnectModal();
+  const navigate = useNavigate();
 
   const handleBuyClick = () => {
     if (!isConnected) {
@@ -45,6 +47,13 @@ const Navigation = () => {
         
         <div className="flex items-center space-x-4">
           <ExploreDropdown />
+          <Button
+            variant="outline"
+            onClick={() => navigate('/dex')}
+          >
+            <ArrowRightLeft className="w-4 h-4 mr-2" />
+            Trade
+          </Button>
           <ConnectButton
             client={client}
             chain={chain}
