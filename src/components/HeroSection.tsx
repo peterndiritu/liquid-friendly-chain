@@ -1,48 +1,15 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Zap, Link, TrendingUp } from "lucide-react";
 import WalletConnection from "./WalletConnection";
-import PurchaseModal from "./PurchaseModal";
-import AirdropClaimDialog from "./AirdropClaimDialog";
-import { useWalletStatus } from "@/hooks/useWalletStatus";
-import { useTokenPurchase } from "@/hooks/useTokenPurchase";
-import { useAirdropClaim } from "@/hooks/useAirdropClaim";
-import { useConnectModal } from "thirdweb/react";
-import { client } from "@/lib/thirdweb";
-import { toast } from "@/hooks/use-toast";
 
 const HeroSection = () => {
-  const [purchaseModalOpen, setPurchaseModalOpen] = useState(false);
-  const [airdropDialogOpen, setAirdropDialogOpen] = useState(false);
-  
-  const { isConnected } = useWalletStatus();
-  const { buyTokens, isLoading: isPurchasing } = useTokenPurchase();
-  const { claimAirdrop, isLoading: isClaiming, isEligible, isClaimed, claimableAmount } = useAirdropClaim();
-  const { connect } = useConnectModal();
-
   const handleBuyClick = () => {
-    if (!isConnected) {
-      toast({
-        title: "Connect Wallet",
-        description: "Please connect your wallet to purchase tokens",
-      });
-      connect({ client });
-      return;
-    }
-    setPurchaseModalOpen(true);
+    window.location.href = '/dex';
   };
 
   const handleClaimClick = () => {
-    if (!isConnected) {
-      toast({
-        title: "Connect Wallet",
-        description: "Please connect your wallet to claim airdrop",
-      });
-      connect({ client });
-      return;
-    }
-    setAirdropDialogOpen(true);
+    window.location.href = '/dex';
   };
 
   return (
@@ -115,23 +82,6 @@ const HeroSection = () => {
           </Card>
         </div>
       </div>
-
-      <PurchaseModal
-        open={purchaseModalOpen}
-        onOpenChange={setPurchaseModalOpen}
-        onPurchase={buyTokens}
-        isLoading={isPurchasing}
-      />
-
-      <AirdropClaimDialog
-        open={airdropDialogOpen}
-        onOpenChange={setAirdropDialogOpen}
-        onClaim={claimAirdrop}
-        isLoading={isClaiming}
-        isEligible={isEligible}
-        isClaimed={isClaimed}
-        claimableAmount={claimableAmount}
-      />
     </section>
   );
 };

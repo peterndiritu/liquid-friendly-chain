@@ -1,17 +1,27 @@
 import { useState } from "react";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import { prepareTransaction, toWei } from "thirdweb";
-import { chain } from "@/lib/thirdweb";
 import { toast } from "@/hooks/use-toast";
 import { saveTransaction } from "@/lib/transactionStorage";
 import { FLD_PRICE_USD } from "@/lib/contracts";
+
+// Token prices (approximate USD values)
+const TOKEN_PRICES: Record<string, number> = {
+  ETH: 3500,
+  BNB: 600,
+  MATIC: 0.90,
+  POL: 0.90,
+  AVAX: 38,
+  USDT: 1,
+  USDC: 1,
+};
 
 export const useTokenPurchase = () => {
   const [isLoading, setIsLoading] = useState(false);
   const account = useActiveAccount();
   const { mutateAsync: sendTransaction } = useSendTransaction();
 
-  const buyTokens = async (bnbAmount: number) => {
+  const buyTokens = async (tokenAmount: number, tokenSymbol: string = "BNB") => {
     if (!account) {
       toast({
         title: "Wallet not connected",
@@ -29,9 +39,9 @@ export const useTokenPurchase = () => {
       
       await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate transaction
       
-      // Calculate FLD amount based on BNB price and FLD price
-      const BNB_PRICE_USD = 600; // Approximate BNB price in USD
-      const usdAmount = bnbAmount * BNB_PRICE_USD;
+      // Calculate FLD amount based on token price and FLD price
+      const tokenPriceUSD = TOKEN_PRICES[tokenSymbol] || 1;
+      const usdAmount = tokenAmount * tokenPriceUSD;
       const fldAmount = (usdAmount / FLD_PRICE_USD).toFixed(2);
       
       // Save transaction to history
@@ -48,7 +58,7 @@ export const useTokenPurchase = () => {
       
       toast({
         title: "Purchase Successful!",
-        description: `Successfully purchased ${fldAmount} FLD tokens with ${bnbAmount} BNB`,
+        description: `Successfully purchased ${fldAmount} FLD tokens with ${tokenAmount} ${tokenSymbol}`,
       });
       
       return true;

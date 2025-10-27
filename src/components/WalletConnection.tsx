@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { ConnectButton } from "thirdweb/react";
-import { client, chain } from "@/lib/thirdweb";
+import { client } from "@/lib/thirdweb";
 
 const WalletConnection = () => {
   return (
@@ -13,13 +13,12 @@ const WalletConnection = () => {
         <div className="flex justify-center">
           <ConnectButton
             client={client}
-            chain={chain}
             connectModal={{
               size: "wide",
               title: "Connect to Fluid Network",
               welcomeScreen: {
                 title: "Welcome to Fluid Network",
-                subtitle: "Connect your wallet to interact with BSC",
+                subtitle: "Connect your wallet across multiple networks: Ethereum, BSC, Polygon, and more",
               },
             }}
             theme="dark"

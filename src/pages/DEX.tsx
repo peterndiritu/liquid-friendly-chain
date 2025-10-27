@@ -43,8 +43,8 @@ const DEX = () => {
 
   const balance = (parseFloat(totalPurchased) + parseFloat(totalClaimed)).toFixed(2);
 
-  const handlePurchase = async (bnbAmount: number) => {
-    const result = await buyTokens(bnbAmount);
+  const handlePurchase = async (tokenAmount: number, tokenSymbol: string) => {
+    const result = await buyTokens(tokenAmount, tokenSymbol);
     if (result) {
       setPurchaseModalOpen(false);
       refreshHistory();

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
@@ -15,29 +14,10 @@ import {
   PieChart,
   BarChart3
 } from "lucide-react";
-import PurchaseModal from "@/components/PurchaseModal";
-import { useWalletStatus } from "@/hooks/useWalletStatus";
-import { useTokenPurchase } from "@/hooks/useTokenPurchase";
-import { useConnectModal } from "thirdweb/react";
-import { client } from "@/lib/thirdweb";
-import { toast } from "@/hooks/use-toast";
 
 const Tokenomics = () => {
-  const [purchaseModalOpen, setPurchaseModalOpen] = useState(false);
-  const { isConnected } = useWalletStatus();
-  const { buyTokens, isLoading: isPurchasing } = useTokenPurchase();
-  const { connect } = useConnectModal();
-
   const handleBuyClick = () => {
-    if (!isConnected) {
-      toast({
-        title: "Connect Wallet",
-        description: "Please connect your wallet to purchase tokens",
-      });
-      connect({ client });
-      return;
-    }
-    setPurchaseModalOpen(true);
+    window.location.href = '/dex';
   };
 
   const tokenDistribution = [
@@ -305,13 +285,6 @@ const Tokenomics = () => {
         </section>
       </main>
       <Footer />
-
-      <PurchaseModal
-        open={purchaseModalOpen}
-        onOpenChange={setPurchaseModalOpen}
-        onPurchase={buyTokens}
-        isLoading={isPurchasing}
-      />
     </div>
   );
 };
