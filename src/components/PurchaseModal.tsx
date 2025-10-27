@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FLD_PRICE_USD } from "@/lib/contracts";
 import { Loader2, Coins } from "lucide-react";
+import { useWalletStatus } from "@/hooks/useWalletStatus";
+import { useTokenBalances } from "@/hooks/useTokenBalances";
+import { TOKEN_CONTRACTS } from "@/lib/thirdweb";
 
 interface PurchaseModalProps {
   open: boolean;
@@ -25,6 +28,7 @@ const AVAILABLE_TOKENS = [
   { symbol: "ETH", name: "Ethereum", price: 3500 },
   { symbol: "BNB", name: "BNB", price: 600 },
   { symbol: "MATIC", name: "Polygon", price: 0.90 },
+  { symbol: "POL", name: "Polygon", price: 0.90 },
   { symbol: "AVAX", name: "Avalanche", price: 38 },
   { symbol: "USDT", name: "Tether USD", price: 1 },
   { symbol: "USDC", name: "USD Coin", price: 1 },
@@ -33,6 +37,24 @@ const AVAILABLE_TOKENS = [
 const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseModalProps) => {
   const [tokenAmount, setTokenAmount] = useState("1");
   const [selectedToken, setSelectedToken] = useState("BNB");
+  const { chain, chainName } = useWalletStatus();
+  const { balances } = useTokenBalances();
+
+  // Reset selected token when chain changes
+  useEffect(() => {
+    if (chain) {
+      const chainId = chain.id as keyof typeof TOKEN_CONTRACTS;
+      
+      // Set to native token of the chain
+      if (chainName?.includes("Ethereum")) setSelectedToken("ETH");
+      else if (chainName?.includes("BSC") || chainName?.includes("BNB")) setSelectedToken("BNB");
+      else if (chainName?.includes("Polygon")) setSelectedToken("POL");
+      else if (chainName?.includes("Avalanche")) setSelectedToken("AVAX");
+      else if (chainName?.includes("Arbitrum")) setSelectedToken("ETH");
+      else if (chainName?.includes("Optimism")) setSelectedToken("ETH");
+      else if (chainName?.includes("Base")) setSelectedToken("ETH");
+    }
+  }, [chain, chainName]);
 
   const calculateFLDAmount = (amount: number, tokenSymbol: string) => {
     const token = AVAILABLE_TOKENS.find(t => t.symbol === tokenSymbol);
@@ -57,6 +79,27 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
   const fldAmount = calculateFLDAmount(parseFloat(tokenAmount) || 0, selectedToken);
   const selectedTokenData = AVAILABLE_TOKENS.find(t => t.symbol === selectedToken);
 
+  // Filter available tokens based on current network
+  const availableTokens = AVAILABLE_TOKENS.filter(token => {
+    if (!chain) return true;
+    const chainId = chain.id as keyof typeof TOKEN_CONTRACTS;
+    const tokensOnChain = TOKEN_CONTRACTS[chainId];
+    
+    // Native tokens
+    if (token.symbol === "ETH" && (chainName?.includes("Ethereum") || chainName?.includes("Arbitrum") || chainName?.includes("Optimism") || chainName?.includes("Base"))) return true;
+    if (token.symbol === "BNB" && chainName?.includes("BSC")) return true;
+    if ((token.symbol === "MATIC" || token.symbol === "POL") && chainName?.includes("Polygon")) return true;
+    if (token.symbol === "AVAX" && chainName?.includes("Avalanche")) return true;
+    
+    // ERC20 tokens
+    if ((token.symbol === "USDT" || token.symbol === "USDC") && tokensOnChain && token.symbol in tokensOnChain) return true;
+    
+    return false;
+  });
+
+  // Get balance for selected token
+  const selectedTokenBalance = balances.find(b => b.symbol === selectedToken || (b.symbol === "POL" && selectedToken === "MATIC"));
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -66,7 +109,7 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
             Buy FLD Tokens
           </DialogTitle>
           <DialogDescription>
-            Purchase FLD tokens using multiple cryptocurrencies across different networks
+            Purchase FLD tokens on {chainName || 'current network'}
           </DialogDescription>
         </DialogHeader>
 
@@ -79,7 +122,7 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
                 <SelectValue placeholder="Select a token" />
               </SelectTrigger>
               <SelectContent>
-                {AVAILABLE_TOKENS.map((token) => (
+                {availableTokens.map((token) => (
                   <SelectItem key={token.symbol} value={token.symbol}>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">{token.symbol}</span>
@@ -89,6 +132,11 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
                 ))}
               </SelectContent>
             </Select>
+            {selectedTokenBalance && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Available: {parseFloat(selectedTokenBalance.balance).toFixed(4)} {selectedToken}
+              </p>
+            )}
           </div>
 
           {/* Amount Input */}
@@ -131,7 +179,7 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
           {/* Info Box */}
           <div className="rounded-lg bg-blue-500/5 border border-blue-500/10 p-3">
             <p className="text-xs text-muted-foreground">
-              💡 Multi-chain support: Connect your wallet to Ethereum, BSC, Polygon, Avalanche, Arbitrum, Optimism, or Base networks
+              💡 {availableTokens.length} token{availableTokens.length > 1 ? 's' : ''} available on {chainName}. Switch networks to access more tokens.
             </p>
           </div>
 

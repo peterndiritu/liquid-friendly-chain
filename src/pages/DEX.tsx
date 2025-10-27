@@ -6,6 +6,8 @@ import DexStats from "@/components/DexStats";
 import TransactionHistory from "@/components/TransactionHistory";
 import PurchaseModal from "@/components/PurchaseModal";
 import AirdropClaimDialog from "@/components/AirdropClaimDialog";
+import NetworkSwitcher from "@/components/NetworkSwitcher";
+import TokenBalances from "@/components/TokenBalances";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useWalletStatus } from "@/hooks/useWalletStatus";
@@ -85,16 +87,36 @@ const DEX = () => {
           <WalletConnection />
         ) : (
           <>
-            {/* Stats Dashboard */}
-            <DexStats 
-              balance={balance}
-              totalPurchased={totalPurchased}
-              totalClaimed={totalClaimed}
-              address={address || ""}
-            />
+            {/* Network Switcher & Wallet Info */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 p-4 rounded-lg bg-card border animate-fade-in">
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col">
+                  <p className="font-semibold text-sm text-muted-foreground">Connected Wallet</p>
+                  <p className="font-mono text-sm">{address?.slice(0, 6)}...{address?.slice(-4)}</p>
+                </div>
+              </div>
+              <NetworkSwitcher />
+            </div>
 
-            {/* Action Cards */}
-            <div className="grid md:grid-cols-2 gap-6 mb-12 animate-scale-in">
+            {/* Main Grid Layout */}
+            <div className="grid lg:grid-cols-3 gap-6 mb-8">
+              {/* Left Column: Token Balances */}
+              <div className="lg:col-span-1">
+                <TokenBalances />
+              </div>
+
+              {/* Right Column: FLD Stats & Actions */}
+              <div className="lg:col-span-2 space-y-6">
+                {/* Stats Dashboard */}
+                <DexStats 
+                  balance={balance}
+                  totalPurchased={totalPurchased}
+                  totalClaimed={totalClaimed}
+                  address={address || ""}
+                />
+
+                {/* Action Cards */}
+                <div className="grid md:grid-cols-2 gap-6 animate-scale-in">
               {/* Buy Card */}
               <Card className="card-glow hover:scale-105 transition-transform">
                 <CardHeader>
@@ -162,6 +184,8 @@ const DEX = () => {
                   </div>
                 </CardContent>
               </Card>
+                </div>
+              </div>
             </div>
 
             {/* Transaction History */}
