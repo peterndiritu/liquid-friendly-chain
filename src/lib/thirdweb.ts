@@ -1,5 +1,9 @@
 import { createThirdwebClient } from "thirdweb";
-import { bsc, ethereum, polygon, avalanche, arbitrum, optimism, base } from "thirdweb/chains";
+import { 
+  bsc, ethereum, polygon, avalanche, arbitrum, optimism, base,
+  fantom, cronos, zkSync, linea, scroll, celo, moonbeam, gnosis, 
+  blast, zora
+} from "thirdweb/chains";
 
 // Create ThirdWeb client instance
 export const client = createThirdwebClient({
@@ -8,13 +12,23 @@ export const client = createThirdwebClient({
 
 // Supported chains for multi-network trading
 export const supportedChains = [
-  bsc,           // Binance Smart Chain
   ethereum,      // Ethereum Mainnet
+  bsc,           // Binance Smart Chain
   polygon,       // Polygon (POL/MATIC)
   avalanche,     // Avalanche C-Chain
   arbitrum,      // Arbitrum One
   optimism,      // Optimism
   base,          // Base
+  fantom,        // Fantom Opera
+  cronos,        // Cronos
+  zkSync,        // zkSync Era
+  linea,         // Linea
+  scroll,        // Scroll
+  celo,          // Celo
+  moonbeam,      // Moonbeam
+  gnosis,        // Gnosis Chain
+  blast,         // Blast
+  zora,          // Zora
 ];
 
 // Default chain for initial connection
@@ -63,5 +77,49 @@ export const TOKEN_CONTRACTS = {
   // Base
   8453: {
     USDC: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+  },
+  // Fantom
+  250: {
+    USDC: "0x04068DA6C83AFCFA0e13ba15A6696662335D5B75",
+    USDT: "0x049d68029688eAbF473097a2fC38ef61633A3C7A",
+  },
+  // Cronos
+  25: {
+    USDC: "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59",
+    USDT: "0x66e428c3f67a68878562e79A0234c1F83c208770",
+  },
+  // zkSync Era
+  324: {
+    USDC: "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4",
+    USDT: "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C",
+  },
+  // Linea
+  59144: {
+    USDC: "0x176211869cA2b568f2A7D4EE941E073a821EE1ff",
+    USDT: "0xA219439258ca9da29E9Cc4cE5596924745e12B93",
+  },
+  // Scroll
+  534352: {
+    USDC: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+  },
+  // Celo
+  42220: {
+    USDC: "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
+    USDT: "0x617f3112bf5397D0467D315cC709EF968D9ba546",
+  },
+  // Moonbeam
+  1284: {
+    USDC: "0x931715FEE2d06333043d11F658C8CE934aC61D0c",
+    USDT: "0xeFAeeE334F0Fd1712f9a8cc375f427D9Cdd40d73",
+  },
+  // Gnosis
+  100: {
+    USDC: "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83",
+    USDT: "0x4ECaBa5870353805a9F068101A40E0f32ed605C6",
+  },
+  // Mantle
+  5000: {
+    USDT: "0x201EBa5CC46D216Ce6DC03F6a759e8E766e956aE",
+    USDC: "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9",
   },
 } as const;

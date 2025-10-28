@@ -8,6 +8,8 @@ import PurchaseModal from "@/components/PurchaseModal";
 import AirdropClaimDialog from "@/components/AirdropClaimDialog";
 import NetworkSwitcher from "@/components/NetworkSwitcher";
 import TokenBalances from "@/components/TokenBalances";
+import PortfolioValue from "@/components/PortfolioValue";
+import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useWalletStatus } from "@/hooks/useWalletStatus";
@@ -31,6 +33,7 @@ const DEX = () => {
     claimableAmount 
   } = useAirdropClaim();
   const { transactions, isLoading: isLoadingHistory, refreshHistory } = useTransactionHistory();
+  const { balances, isLoading: isLoadingBalances } = useTokenBalances();
 
   // Calculate stats from transactions
   const totalPurchased = transactions
@@ -100,8 +103,12 @@ const DEX = () => {
 
             {/* Main Grid Layout */}
             <div className="grid lg:grid-cols-3 gap-6 mb-8">
-              {/* Left Column: Token Balances */}
-              <div className="lg:col-span-1">
+              {/* Left Column: Portfolio & Token Balances */}
+              <div className="lg:col-span-1 space-y-6">
+                <PortfolioValue 
+                  balances={balances}
+                  isLoading={isLoadingBalances}
+                />
                 <TokenBalances />
               </div>
 

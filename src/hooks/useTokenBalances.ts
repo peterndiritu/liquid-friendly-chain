@@ -10,6 +10,8 @@ export interface TokenBalance {
   balance: string;
   address?: string;
   type: 'native' | 'ERC20';
+  usdPrice?: number;
+  usdValue?: number;
 }
 
 export const useTokenBalances = () => {

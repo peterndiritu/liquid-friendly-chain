@@ -53,12 +53,31 @@ const NetworkSwitcher = () => {
         <Globe className="w-4 h-4 mr-2" />
         <SelectValue placeholder="Select Network" />
       </SelectTrigger>
-      <SelectContent>
-        {supportedChains.map(chainOption => (
-          <SelectItem key={chainOption.id} value={chainOption.id.toString()}>
-            {chainOption.name}
-          </SelectItem>
-        ))}
+      <SelectContent className="max-h-[400px]">
+        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+          Layer 1 Networks
+        </div>
+        <SelectItem value="1">Ethereum Mainnet</SelectItem>
+        <SelectItem value="56">BNB Smart Chain</SelectItem>
+        <SelectItem value="43114">Avalanche C-Chain</SelectItem>
+        <SelectItem value="250">Fantom Opera</SelectItem>
+        <SelectItem value="25">Cronos</SelectItem>
+        <SelectItem value="42220">Celo</SelectItem>
+        <SelectItem value="1284">Moonbeam</SelectItem>
+        <SelectItem value="100">Gnosis Chain</SelectItem>
+        
+        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground mt-2">
+          Layer 2 Networks
+        </div>
+        <SelectItem value="137">Polygon</SelectItem>
+        <SelectItem value="42161">Arbitrum One</SelectItem>
+        <SelectItem value="10">Optimism</SelectItem>
+        <SelectItem value="8453">Base</SelectItem>
+        <SelectItem value="324">zkSync Era</SelectItem>
+        <SelectItem value="59144">Linea</SelectItem>
+        <SelectItem value="534352">Scroll</SelectItem>
+        <SelectItem value="81457">Blast</SelectItem>
+        <SelectItem value="7777777">Zora</SelectItem>
       </SelectContent>
     </Select>
   );
