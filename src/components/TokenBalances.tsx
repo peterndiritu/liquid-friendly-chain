@@ -1,25 +1,27 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, AlertCircle } from "lucide-react";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { useWalletStatus } from "@/hooks/useWalletStatus";
 import { useTokenPrices } from "@/hooks/useTokenPrices";
 import TokenBalanceRow from "./TokenBalanceRow";
 import { Skeleton } from "./ui/skeleton";
+import { formatDistanceToNow } from "date-fns";
 
 const TokenBalances = () => {
   const { balances, isLoading, refresh } = useTokenBalances();
   const { chainName, chainId } = useWalletStatus();
   
   const symbols = balances.map(b => b.symbol);
-  const { prices, isLoading: isPricesLoading } = useTokenPrices(symbols);
+  const { prices, isLoading: isPricesLoading, error, lastUpdated, refresh: refreshPrices } = useTokenPrices(symbols);
   
   const balancesWithUSD = balances.map(balance => ({
     ...balance,
-    usdPrice: prices[balance.symbol],
-    usdValue: prices[balance.symbol] 
-      ? parseFloat(balance.balance) * prices[balance.symbol]
+    usdPrice: prices[balance.symbol]?.price,
+    usdValue: prices[balance.symbol]?.price 
+      ? parseFloat(balance.balance) * prices[balance.symbol].price
       : undefined,
+    priceChange24h: prices[balance.symbol]?.change24h,
   }));
   
   const netBalance = balancesWithUSD.reduce((sum, token) => {
@@ -31,10 +33,22 @@ const TokenBalances = () => {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <CardTitle>Token Balances</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              Token Balances
+              {isPricesLoading && (
+                <span className="text-xs text-primary flex items-center gap-1">
+                  <RefreshCw className="w-3 h-3 animate-spin" />
+                </span>
+              )}
+            </CardTitle>
             <CardDescription>
               Your balances on {chainName || 'Unknown Network'}
             </CardDescription>
+            {lastUpdated && !isPricesLoading && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Prices updated {formatDistanceToNow(lastUpdated, { addSuffix: true })}
+              </p>
+            )}
             {!isPricesLoading && netBalance > 0 && (
               <div className="mt-2 pt-2 border-t">
                 <p className="text-xs text-muted-foreground">Net Balance</p>
@@ -53,6 +67,20 @@ const TokenBalances = () => {
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </Button>
         </div>
+        {error && (
+          <div className="mt-3 p-3 bg-destructive/10 text-destructive text-sm rounded-lg flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            <span>{error}</span>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={refreshPrices}
+              className="ml-auto"
+            >
+              Retry
+            </Button>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -80,6 +108,7 @@ const TokenBalances = () => {
                   usdPrice={token.usdPrice}
                   usdValue={token.usdValue}
                   chainId={chainId}
+                  priceChange24h={token.priceChange24h}
                 />
               ))}
           </div>

@@ -12,6 +12,7 @@ export interface TokenBalance {
   type: 'native' | 'ERC20';
   usdPrice?: number;
   usdValue?: number;
+  priceChange24h?: number;
 }
 
 export const useTokenBalances = () => {

@@ -1,16 +1,31 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart } from "lucide-react";
+import { PieChart, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { TokenBalance } from "@/hooks/useTokenBalances";
+import { formatDistanceToNow } from "date-fns";
 
 interface PortfolioValueProps {
   balances: TokenBalance[];
   isLoading: boolean;
+  lastUpdated?: Date | null;
+  onRefresh?: () => void;
 }
 
-const PortfolioValue = ({ balances, isLoading }: PortfolioValueProps) => {
+const PortfolioValue = ({ balances, isLoading, lastUpdated, onRefresh }: PortfolioValueProps) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
   const totalValue = balances.reduce((sum, token) => {
     return sum + (token.usdValue || 0);
   }, 0);
+
+  const handleRefresh = async () => {
+    if (onRefresh) {
+      setIsRefreshing(true);
+      onRefresh();
+      setTimeout(() => setIsRefreshing(false), 1000);
+    }
+  };
 
   const topTokens = balances
     .filter(b => b.usdValue && b.usdValue > 0)
@@ -48,10 +63,34 @@ const PortfolioValue = ({ balances, isLoading }: PortfolioValueProps) => {
   return (
     <Card className="card-glow">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <PieChart className="w-5 h-5" />
-          Total Portfolio Value
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <PieChart className="w-5 h-5" />
+            Total Portfolio Value
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 text-xs text-green-500">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="font-medium">LIVE</span>
+            </div>
+            {onRefresh && (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="h-8 w-8"
+              >
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
+            )}
+          </div>
+        </div>
+        {lastUpdated && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Updated {formatDistanceToNow(lastUpdated, { addSuffix: true })}
+          </p>
+        )}
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

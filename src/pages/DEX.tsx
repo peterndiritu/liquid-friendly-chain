@@ -16,6 +16,7 @@ import { useWalletStatus } from "@/hooks/useWalletStatus";
 import { useTokenPurchase } from "@/hooks/useTokenPurchase";
 import { useAirdropClaim } from "@/hooks/useAirdropClaim";
 import { useTransactionHistory } from "@/hooks/useTransactionHistory";
+import { useTokenPrices } from "@/hooks/useTokenPrices";
 import { ShoppingCart, Gift, ArrowRightLeft } from "lucide-react";
 import { FLD_PRICE_USD } from "@/lib/contracts";
 
@@ -34,6 +35,9 @@ const DEX = () => {
   } = useAirdropClaim();
   const { transactions, isLoading: isLoadingHistory, refreshHistory } = useTransactionHistory();
   const { balances, isLoading: isLoadingBalances } = useTokenBalances();
+  
+  const symbols = balances.map(b => b.symbol);
+  const { lastUpdated, refresh: refreshPrices } = useTokenPrices(symbols);
 
   // Calculate stats from transactions
   const totalPurchased = transactions
@@ -108,6 +112,8 @@ const DEX = () => {
                 <PortfolioValue 
                   balances={balances}
                   isLoading={isLoadingBalances}
+                  lastUpdated={lastUpdated}
+                  onRefresh={refreshPrices}
                 />
                 <TokenBalances />
               </div>

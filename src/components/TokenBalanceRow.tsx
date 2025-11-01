@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, Copy, ExternalLink, Plus } from "lucide-react";
+import { ChevronDown, Copy, ExternalLink, Plus, TrendingUp, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import TokenIcon from "./TokenIcon";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ interface TokenBalanceRowProps {
   usdPrice?: number;
   usdValue?: number;
   chainId?: number;
+  priceChange24h?: number;
 }
 
 const TokenBalanceRow = ({ 
@@ -22,7 +23,8 @@ const TokenBalanceRow = ({
   address,
   usdPrice,
   usdValue,
-  chainId 
+  chainId,
+  priceChange24h
 }: TokenBalanceRowProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const balanceNum = parseFloat(balance);
@@ -109,9 +111,23 @@ const TokenBalanceRow = ({
           <div className="text-right mr-3">
             <p className="font-bold">{balanceNum.toFixed(4)}</p>
             {usdValue !== undefined && (
-              <p className="text-xs text-muted-foreground">
-                ${usdValue.toFixed(2)}
-              </p>
+              <div className="flex items-center justify-end gap-1.5">
+                <p className="text-xs text-muted-foreground">
+                  ${usdValue.toFixed(2)}
+                </p>
+                {priceChange24h !== undefined && (
+                  <span className={`text-xs flex items-center gap-0.5 ${
+                    priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'
+                  }`}>
+                    {priceChange24h >= 0 ? (
+                      <TrendingUp className="w-3 h-3" />
+                    ) : (
+                      <TrendingDown className="w-3 h-3" />
+                    )}
+                    {Math.abs(priceChange24h).toFixed(1)}%
+                  </span>
+                )}
+              </div>
             )}
           </div>
           <ChevronDown 
@@ -130,7 +146,21 @@ const TokenBalanceRow = ({
             {usdPrice && (
               <div>
                 <p className="text-muted-foreground text-xs mb-1">Price (USD)</p>
-                <p className="font-medium">${usdPrice.toFixed(6)}</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-medium">${usdPrice.toFixed(6)}</p>
+                  {priceChange24h !== undefined && (
+                    <span className={`text-xs flex items-center gap-0.5 ${
+                      priceChange24h >= 0 ? 'text-green-500' : 'text-red-500'
+                    }`}>
+                      {priceChange24h >= 0 ? (
+                        <TrendingUp className="w-3 h-3" />
+                      ) : (
+                        <TrendingDown className="w-3 h-3" />
+                      )}
+                      {Math.abs(priceChange24h).toFixed(1)}%
+                    </span>
+                  )}
+                </div>
               </div>
             )}
           </div>
