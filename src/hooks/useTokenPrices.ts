@@ -12,8 +12,8 @@ interface TokenPrices {
 const COINGECKO_IDS: Record<string, string> = {
   ETH: "ethereum",
   BNB: "binancecoin",
-  MATIC: "matic-network",
-  POL: "matic-network",
+  MATIC: "polygon-ecosystem-token",
+  POL: "polygon-ecosystem-token",
   AVAX: "avalanche-2",
   OP: "optimism",
   ARB: "arbitrum",
