@@ -39,34 +39,89 @@ const DEX = () => {
   const symbols = balances.map(b => b.symbol);
   const { lastUpdated, refresh: refreshPrices } = useTokenPrices(symbols);
 
-  // Calculate stats from transactions
-  const totalPurchased = transactions
-    .filter(tx => tx.type === 'purchase' && tx.status === 'success')
-    .reduce((sum, tx) => sum + parseFloat(tx.amount), 0)
-    .toFixed(2);
+  // helper to safely parse numbers
+  const parseNumber = (v: unknown) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  };
 
-  const totalClaimed = transactions
-    .filter(tx => tx.type === 'claim' && tx.status === 'success')
-    .reduce((sum, tx) => sum + parseFloat(tx.amount), 0)
-    .toFixed(2);
+  // Calculate stats from transactions (safer parsing)
+  const totalPurchased = (
+    transactions
+      .filter(tx => tx.type === 'purchase' && tx.status === 'success')
+      .reduce((sum, tx) => sum + parseNumber(tx.amount), 0)
+  ).toFixed(2);
 
-  const balance = (parseFloat(totalPurchased) + parseFloat(totalClaimed)).toFixed(2);
+  const totalClaimed = (
+    transactions
+      .filter(tx => tx.type === 'claim' && tx.status === 'success')
+      .reduce((sum, tx) => sum + parseNumber(tx.amount), 0)
+  ).toFixed(2);
 
+  const balance = (parseNumber(totalPurchased) + parseNumber(totalClaimed)).toFixed(2);
+
+  // cleaned purchase handler
   const handlePurchase = async (tokenAmount: number, tokenSymbol: string) => {
-    const result = await buyTokens(tokenAmount, tokenSymbol);
-    if (result) {
-      setPurchaseModalOpen(false);
-      refreshHistory();
+    if (!isConnected) {
+      console.warn("Wallet not connected");
+      return;
+    }
+
+    const amount = Number(tokenAmount);
+    if (!tokenSymbol || !Number.isFinite(amount) || amount <= 0) {
+      console.warn("Invalid purchase amount or token symbol");
+      return;
+    }
+
+    // Prevent duplicate submissions
+    if (isPurchasing) return;
+
+    try {
+      const result = await buyTokens(amount, tokenSymbol);
+      if (result) {
+        // On success: close modal and refresh history
+        setPurchaseModalOpen(false);
+        refreshHistory();
+        // optionally: show success toast
+      } else {
+        // optionally: show failure toast
+        console.warn("Purchase returned falsy result");
+      }
+    } catch (err) {
+      console.error("Purchase failed", err);
+      // optionally: show error toast or UI feedback
     }
   };
 
+  // cleaned claim handler
   const handleClaim = async () => {
-    const result = await claimAirdrop();
-    if (result) {
-      setTimeout(() => {
-        setAirdropDialogOpen(false);
-        refreshHistory();
-      }, 1500);
+    if (!isConnected) {
+      console.warn("Wallet not connected");
+      return;
+    }
+    if (!isEligible || isClaimed) {
+      console.warn("Not eligible or already claimed");
+      return;
+    }
+
+    if (isClaiming) return;
+
+    try {
+      const result = await claimAirdrop();
+      if (result) {
+        // Close dialog and refresh history after a short delay to allow UI update
+        setTimeout(() => {
+          setAirdropDialogOpen(false);
+          refreshHistory();
+        }, 800);
+        // optionally: show success toast
+      } else {
+        console.warn("Claim returned falsy result");
+        // optionally: show failure toast
+      }
+    } catch (err) {
+      console.error("Claim failed", err);
+      // optionally: show error toast or UI feedback
     }
   };
 
@@ -152,6 +207,7 @@ const DEX = () => {
                       className="w-full button-glow" 
                       size="lg"
                       onClick={() => setPurchaseModalOpen(true)}
+                      disabled={isPurchasing}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
                       Buy Now
@@ -188,7 +244,7 @@ const DEX = () => {
                       className="w-full"
                       size="lg"
                       onClick={() => setAirdropDialogOpen(true)}
-                      disabled={isClaimed || !isEligible}
+                      disabled={isClaimed || !isEligible || isClaiming}
                       variant={isClaimed ? "secondary" : "default"}
                     >
                       <Gift className="w-4 h-4 mr-2" />
