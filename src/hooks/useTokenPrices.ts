@@ -9,16 +9,16 @@ interface TokenPrices {
   [symbol: string]: TokenPriceData;
 }
 
-const COINGECKO_IDS: Record<string, string> = {
+const COINCAP_IDS: Record<string, string> = {
   ETH: "ethereum",
-  BNB: "binancecoin",
-  MATIC: "polygon-ecosystem-token",
-  POL: "polygon-ecosystem-token",
-  AVAX: "avalanche-2",
+  BNB: "binance-coin",
+  MATIC: "polygon",
+  POL: "polygon",
+  AVAX: "avalanche",
   OP: "optimism",
   ARB: "arbitrum",
   FTM: "fantom",
-  CRO: "crypto-com-chain",
+  CRO: "crypto-com-coin",
   CELO: "celo",
   GLMR: "moonbeam",
   XDAI: "xdai",
@@ -26,7 +26,7 @@ const COINGECKO_IDS: Record<string, string> = {
   MNT: "mantle",
   USDT: "tether",
   USDC: "usd-coin",
-  FLD: "fluid-network",
+  FLD: "fluid",
 };
 
 export const useTokenPrices = (symbols: string[]) => {
@@ -40,7 +40,7 @@ export const useTokenPrices = (symbols: string[]) => {
       setIsLoading(true);
       
       const ids = symbols
-        .map(symbol => COINGECKO_IDS[symbol])
+        .map(symbol => COINCAP_IDS[symbol])
         .filter(Boolean)
         .join(',');
       
@@ -50,20 +50,22 @@ export const useTokenPrices = (symbols: string[]) => {
       }
 
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`
+        `https://api.coincap.io/v2/assets?ids=${ids}`
       );
       
       if (!response.ok) throw new Error("Failed to fetch prices");
       
-      const data = await response.json();
+      const { data } = await response.json();
       
       const priceMap: TokenPrices = {};
       symbols.forEach(symbol => {
-        const id = COINGECKO_IDS[symbol];
-        if (id && data[id]) {
+        const id = COINCAP_IDS[symbol];
+        const asset = data.find((a: any) => a.id === id);
+        
+        if (asset) {
           priceMap[symbol] = {
-            price: data[id].usd,
-            change24h: data[id].usd_24h_change || 0,
+            price: parseFloat(asset.priceUsd),
+            change24h: parseFloat(asset.changePercent24Hr) || 0,
           };
         }
       });
@@ -71,9 +73,23 @@ export const useTokenPrices = (symbols: string[]) => {
       setPrices(priceMap);
       setLastUpdated(new Date());
       setError(null);
+      
+      // Cache prices in localStorage
+      localStorage.setItem('cached_prices', JSON.stringify({
+        prices: priceMap,
+        timestamp: Date.now(),
+      }));
     } catch (err) {
       console.error("Error fetching token prices:", err);
       setError("Failed to fetch prices");
+      
+      // Try to load from cache
+      const cached = localStorage.getItem('cached_prices');
+      if (cached) {
+        const { prices: cachedPrices } = JSON.parse(cached);
+        setPrices(cachedPrices);
+        setError("Using cached prices");
+      }
     } finally {
       setIsLoading(false);
     }

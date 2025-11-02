@@ -21,13 +21,11 @@ const Tokenomics = () => {
   };
 
   const tokenDistribution = [
-    { category: "Public Sale", percentage: 25, amount: "2.5M FLD", color: "bg-blue-500" },
-    { category: "Team & Advisors", percentage: 20, amount: "2M FLD", color: "bg-green-500" },
-    { category: "Development", percentage: 15, amount: "1.5M FLD", color: "bg-purple-500" },
-    { category: "Marketing", percentage: 10, amount: "1M FLD", color: "bg-yellow-500" },
-    { category: "Reserve Fund", percentage: 15, amount: "1.5M FLD", color: "bg-red-500" },
-    { category: "Community Rewards", percentage: 10, amount: "1M FLD", color: "bg-indigo-500" },
-    { category: "Liquidity Mining", percentage: 5, amount: "500K FLD", color: "bg-pink-500" }
+    { category: "Public Sale", percentage: 40, amount: "4M FLD", color: "bg-blue-500" },
+    { category: "Community Rewards", percentage: 30, amount: "3M FLD", color: "bg-indigo-500" },
+    { category: "FLD Reserved & Development", percentage: 10, amount: "1M FLD", color: "bg-purple-500" },
+    { category: "Marketing and Liquidity", percentage: 10, amount: "1M FLD", color: "bg-yellow-500" },
+    { category: "Ecosystem Reserve", percentage: 10, amount: "1M FLD", color: "bg-green-500" }
   ];
 
   const stakingRewards = [
@@ -158,20 +156,20 @@ const Tokenomics = () => {
                     <span className="text-primary font-semibold">Immediate</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
-                    <span>Team & Advisors</span>
-                    <span>24 month linear</span>
+                    <span>Community Rewards</span>
+                    <span>12 month linear</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
-                    <span>Development</span>
+                    <span>FLD Reserved & Development</span>
                     <span>36 month linear</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
-                    <span>Marketing</span>
+                    <span>Marketing and Liquidity</span>
                     <span>18 month linear</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
-                    <span>Reserve Fund</span>
-                    <span>5 year linear</span>
+                    <span>Ecosystem Reserve</span>
+                    <span>48 month linear</span>
                   </div>
                 </div>
               </Card>
