@@ -1,0 +1,127 @@
+"use client";
+
+import { Card } from "@/components/ui/card";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+interface Section {
+  id: string;
+  title: string;
+}
+
+interface LegalLayoutProps {
+  title: string;
+  description: string;
+  canonical: string;
+  lastUpdated: string;
+  sections?: Section[];
+  children: React.ReactNode;
+}
+
+const LegalLayout = ({
+  title,
+  description,
+  canonical,
+  lastUpdated,
+  sections = [],
+  children,
+}: LegalLayoutProps) => {
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    const elements = document.querySelectorAll("section[id]");
+    elements.forEach((el) => observer.observe(el));
+    return () => elements.forEach((el) => observer.unobserve(el));
+  }, []);
+
+  return (
+    <>
+      <Head>
+        <title>{title} | Fluid Network</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+      </Head>
+
+      <div className="min-h-screen flex flex-col">
+        <Navigation />
+
+        <main className="flex-1 container mx-auto px-4 pt-32 pb-20 flex flex-col lg:flex-row gap-8">
+          {/* Sidebar Navigation */}
+          {sections.length > 0 && (
+            <aside className="hidden lg:block w-1/4 sticky top-32 self-start">
+              <div className="border rounded-lg p-4 bg-muted/30">
+                <h3 className="font-semibold mb-3">On This Page</h3>
+                <ul className="space-y-2 text-sm">
+                  {sections.map((s) => (
+                    <li key={s.id}>
+                      <a
+                        href={`#${s.id}`}
+                        className={`hover:text-primary transition ${
+                          activeSection === s.id
+                            ? "text-primary font-medium"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        {s.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
+          )}
+
+          {/* Main Content */}
+          <div className="flex-1 max-w-3xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+            <p className="text-muted-foreground mb-8">
+              Last Updated: {lastUpdated}
+            </p>
+
+            <Card className="p-8 mb-8 border-primary/20">
+              <p className="text-sm font-semibold mb-2">Legal Notice</p>
+              <p className="text-sm text-muted-foreground">
+                Please read this document carefully before using Fluid Network
+                services. It contains your rights, obligations, and important
+                legal information.
+              </p>
+            </Card>
+
+            <div className="space-y-12">{children}</div>
+
+            <Card className="p-6 mt-12 bg-muted/30">
+              <h3 className="font-semibold mb-2">Need Assistance?</h3>
+              <p className="text-sm text-muted-foreground">
+                Contact our legal team at{" "}
+                <Link
+                  href="mailto:legal@fluidnetwork.com"
+                  className="text-primary underline"
+                >
+                  legal@fluidnetwork.com
+                </Link>
+              </p>
+            </Card>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    </>
+  );
+};
+
+export default LegalLayout;
