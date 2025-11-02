@@ -25,7 +25,7 @@ const Tokenomics = () => {
     { category: "Community Rewards", percentage: 30, amount: "3M FLD", color: "bg-indigo-500" },
     { category: "FLD Reserved & Development", percentage: 10, amount: "1M FLD", color: "bg-purple-500" },
     { category: "Marketing and Liquidity", percentage: 10, amount: "1M FLD", color: "bg-yellow-500" },
-    { category: "Ecosystem Reserve", percentage: 10, amount: "1M FLD", color: "bg-green-500" }
+    { category: "Team & Advisors", percentage: 10, amount: "1M FLD", color: "bg-green-500" }
   ];
 
   const stakingRewards = [
@@ -168,8 +168,8 @@ const Tokenomics = () => {
                     <span>18 month linear</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
-                    <span>Ecosystem Reserve</span>
-                    <span>48 month linear</span>
+                    <span>Team & Advisors</span>
+                    <span>24 month linear</span>
                   </div>
                 </div>
               </Card>
