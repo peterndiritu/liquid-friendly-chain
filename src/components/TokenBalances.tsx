@@ -13,7 +13,7 @@ const TokenBalances = () => {
   const { chainName, chainId } = useWalletStatus();
   
   const symbols = balances.map(b => b.symbol);
-  const { prices, isLoading: isPricesLoading, error, lastUpdated, refresh: refreshPrices } = useTokenPrices(symbols);
+  const { prices, isLoading: isPricesLoading, error, lastUpdated, refresh: refreshPrices, usingFallback } = useTokenPrices(symbols);
   
   const balancesWithUSD = balances.map(balance => ({
     ...balance,
@@ -49,6 +49,14 @@ const TokenBalances = () => {
                 Prices updated {formatDistanceToNow(lastUpdated, { addSuffix: true })}
               </p>
             )}
+            {usingFallback && (
+              <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Showing estimated prices
+                </p>
+              </div>
+            )}
             {!isPricesLoading && netBalance > 0 && (
               <div className="mt-2 pt-2 border-t">
                 <p className="text-xs text-muted-foreground">Net Balance</p>
@@ -67,7 +75,7 @@ const TokenBalances = () => {
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </Button>
         </div>
-        {error && (
+        {error && !usingFallback && (
           <div className="mt-3 p-3 bg-destructive/10 text-destructive text-sm rounded-lg flex items-center gap-2">
             <AlertCircle className="w-4 h-4" />
             <span>{error}</span>
