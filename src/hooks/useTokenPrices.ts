@@ -65,22 +65,48 @@ export const useTokenPrices = (symbols: string[]) => {
         return;
       }
 
-      // Use fallback prices directly - Edge function has network restrictions
-      const fallbackMap: TokenPrices = {};
-      symbols.forEach(symbol => {
-        if (FALLBACK_PRICES[symbol]) {
-          fallbackMap[symbol] = FALLBACK_PRICES[symbol];
+      // Get CoinCap IDs for the requested symbols
+      const ids = symbols
+        .map(symbol => COINCAP_IDS[symbol])
+        .filter(Boolean)
+        .join(',');
+      
+      if (!ids) {
+        setIsLoading(false);
+        return;
+      }
+
+      // Fetch real-time prices directly from CoinCap API
+      const response = await fetch(`https://api.coincap.io/v2/assets?ids=${ids}`);
+      
+      if (!response.ok) throw new Error("Failed to fetch prices");
+      
+      const { data } = await response.json();
+      
+      // Map CoinCap data to our format
+      const priceMap: TokenPrices = {};
+      
+      data.forEach((asset: any) => {
+        const symbol = Object.keys(COINCAP_IDS).find(
+          key => COINCAP_IDS[key] === asset.id
+        );
+        
+        if (symbol) {
+          priceMap[symbol] = {
+            price: parseFloat(asset.priceUsd),
+            change24h: parseFloat(asset.changePercent24Hr || '0'),
+          };
         }
       });
       
-      setPrices(fallbackMap);
+      setPrices(priceMap);
       setLastUpdated(new Date());
       setError(null);
-      setUsingFallback(true);
+      setUsingFallback(false);
       
       // Cache prices in localStorage
       localStorage.setItem('cached_prices', JSON.stringify({
-        prices: fallbackMap,
+        prices: priceMap,
         timestamp: Date.now(),
       }));
     } catch (err) {
