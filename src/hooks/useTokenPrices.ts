@@ -60,40 +60,27 @@ export const useTokenPrices = (symbols: string[]) => {
     try {
       setIsLoading(true);
       
-      const ids = symbols
-        .map(symbol => COINCAP_IDS[symbol])
-        .filter(Boolean)
-        .join(',');
-      
-      if (!ids) {
+      if (symbols.length === 0) {
         setIsLoading(false);
         return;
       }
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-token-prices`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({ symbols }),
+      // Use fallback prices directly - Edge function has network restrictions
+      const fallbackMap: TokenPrices = {};
+      symbols.forEach(symbol => {
+        if (FALLBACK_PRICES[symbol]) {
+          fallbackMap[symbol] = FALLBACK_PRICES[symbol];
         }
-      );
+      });
       
-      if (!response.ok) throw new Error("Failed to fetch prices");
-      
-      const priceMap = await response.json();
-      
-      setPrices(priceMap);
+      setPrices(fallbackMap);
       setLastUpdated(new Date());
       setError(null);
-      setUsingFallback(false);
+      setUsingFallback(true);
       
       // Cache prices in localStorage
       localStorage.setItem('cached_prices', JSON.stringify({
-        prices: priceMap,
+        prices: fallbackMap,
         timestamp: Date.now(),
       }));
     } catch (err) {
