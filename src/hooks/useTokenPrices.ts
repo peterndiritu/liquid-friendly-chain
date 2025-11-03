@@ -45,7 +45,7 @@ const FALLBACK_PRICES: TokenPrices = {
   GLMR: { price: 0.22, change24h: 0 },
   XDAI: { price: 1.00, change24h: 0 },
   MNT: { price: 0.72, change24h: 0 },
-  FLD: { price: 0.10, change24h: 0 },
+  FLD: { price: 1.00, change24h: 0 },
   ETH_AURORA: { price: 2650, change24h: 0 },
 };
 

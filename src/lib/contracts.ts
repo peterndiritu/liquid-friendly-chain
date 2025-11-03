@@ -5,7 +5,7 @@ export const FLD_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000000"; /
 export const AIRDROP_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Placeholder
 
 // FLD Token Price (in USD)
-export const FLD_PRICE_USD = 2.50;
+export const FLD_PRICE_USD = 1.00;
 
 // Minimum and Maximum purchase amounts (in BNB)
 export const MIN_PURCHASE_BNB = 0.1;
