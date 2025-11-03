@@ -71,29 +71,25 @@ export const useTokenPrices = (symbols: string[]) => {
       }
 
       const response = await fetch(
-        `https://api.coincap.io/v2/assets?ids=${ids}`
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-token-prices`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({ symbols }),
+        }
       );
       
       if (!response.ok) throw new Error("Failed to fetch prices");
       
-      const { data } = await response.json();
-      
-      const priceMap: TokenPrices = {};
-      symbols.forEach(symbol => {
-        const id = COINCAP_IDS[symbol];
-        const asset = data.find((a: any) => a.id === id);
-        
-        if (asset) {
-          priceMap[symbol] = {
-            price: parseFloat(asset.priceUsd),
-            change24h: parseFloat(asset.changePercent24Hr) || 0,
-          };
-        }
-      });
+      const priceMap = await response.json();
       
       setPrices(priceMap);
       setLastUpdated(new Date());
       setError(null);
+      setUsingFallback(false);
       
       // Cache prices in localStorage
       localStorage.setItem('cached_prices', JSON.stringify({

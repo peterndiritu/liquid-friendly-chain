@@ -1,0 +1,4 @@
+project_id = "hlaxgatvgdirijknnqky"
+
+[functions.get-token-prices]
+verify_jwt = false
