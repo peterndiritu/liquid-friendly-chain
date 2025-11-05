@@ -58,6 +58,13 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      gradientColorStops: {
+        'blue-start': '#3b82f6',
+        'blue-mid': '#2563eb',
+        'cyan-end': '#06b6d4',
+        'purple-start': '#8b5cf6',
+        'pink-end': '#ec4899',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

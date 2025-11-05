@@ -114,6 +114,35 @@
   }
 
   .button-glow {
-    box-shadow: var(--shadow-button);
+    @apply shadow-lg shadow-blue-500/50;
+    @apply hover:shadow-xl hover:shadow-blue-500/70;
+    @apply transition-all duration-300;
+    @apply bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500;
+    @apply hover:from-blue-700 hover:via-blue-600 hover:to-cyan-600;
+    @apply hover:scale-105;
+  }
+
+  /* Enhanced Button Gradients */
+  .btn-gradient-primary {
+    @apply bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500;
+    @apply hover:from-blue-700 hover:via-blue-600 hover:to-cyan-600;
+    @apply shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/60;
+    @apply transition-all duration-300;
+  }
+
+  .btn-gradient-secondary {
+    @apply bg-gradient-to-r from-purple-600 to-pink-500;
+    @apply hover:from-purple-700 hover:to-pink-600;
+    @apply shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40;
+  }
+
+  .btn-gradient-outline {
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6) border-box;
+    border: 2px solid transparent;
+  }
+
+  .btn-gradient-outline:hover {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
   }
 }
