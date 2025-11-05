@@ -9,7 +9,12 @@ import AirdropClaimDialog from "@/components/AirdropClaimDialog";
 import NetworkSwitcher from "@/components/NetworkSwitcher";
 import TokenBalances from "@/components/TokenBalances";
 import PortfolioValue from "@/components/PortfolioValue";
+import SalesProgressCard from "@/components/SalesProgressCard";
+import AirdropProgressCard from "@/components/AirdropProgressCard";
+import USDTCollectionTracker from "@/components/USDTCollectionTracker";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
+import { useSalesProgress } from "@/hooks/useSalesProgress";
+import { useAirdropProgress } from "@/hooks/useAirdropProgress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useWalletStatus } from "@/hooks/useWalletStatus";
@@ -35,6 +40,8 @@ const DEX = () => {
   } = useAirdropClaim();
   const { transactions, isLoading: isLoadingHistory, refreshHistory } = useTransactionHistory();
   const { balances, isLoading: isLoadingBalances } = useTokenBalances();
+  const salesProgress = useSalesProgress();
+  const airdropProgress = useAirdropProgress();
   
   const symbols = balances.map(b => b.symbol);
   const { lastUpdated, refresh: refreshPrices } = useTokenPrices(symbols);
@@ -103,6 +110,17 @@ const DEX = () => {
                 </div>
               </div>
               <NetworkSwitcher />
+            </div>
+
+            {/* USDT Collection Tracker */}
+            <div className="mb-8 animate-fade-in">
+              <USDTCollectionTracker data={salesProgress} />
+            </div>
+
+            {/* Progress Cards */}
+            <div className="grid lg:grid-cols-2 gap-6 mb-8 animate-fade-in">
+              <SalesProgressCard data={salesProgress} />
+              <AirdropProgressCard data={airdropProgress} />
             </div>
 
             {/* Main Grid Layout */}
