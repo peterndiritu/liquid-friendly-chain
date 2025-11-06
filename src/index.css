@@ -6,35 +6,33 @@
 
 @layer base {
   :root {
-    /* Dark blockchain theme */
-    --background: 220 25% 6%;
-    --foreground: 210 40% 98%;
+    /* Light mode colors */
+    --background: 0 0% 100%;
+    --foreground: 220 25% 10%;
 
-    --card: 220 25% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
 
-    --popover: 220 25% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
 
-    /* Vibrant blue primary colors */
     --primary: 200 100% 50%;
-    --primary-foreground: 220 25% 6%;
-    --primary-glow: 200 100% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 25% 12%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 13% 91%;
+    --secondary-foreground: 220 25% 10%;
 
-    --muted: 220 25% 10%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 220 13% 95%;
+    --muted-foreground: 220 13% 40%;
 
-    --accent: 220 25% 12%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 220 13% 91%;
+    --accent-foreground: 220 25% 10%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 25% 15%;
-    --input: 220 25% 12%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
     --ring: 200 100% 50%;
 
     --radius: 0.75rem;
@@ -71,13 +69,32 @@
   }
 
   .dark {
-    /* Use same colors as root since we're using dark theme by default */
+    /* Dark blockchain theme */
     --background: 220 25% 6%;
     --foreground: 210 40% 98%;
+
     --card: 220 25% 8%;
     --card-foreground: 210 40% 98%;
+
+    --popover: 220 25% 8%;
+    --popover-foreground: 210 40% 98%;
+
     --primary: 200 100% 50%;
     --primary-foreground: 220 25% 6%;
+    --primary-glow: 200 100% 60%;
+
+    --secondary: 220 25% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 220 25% 10%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 220 25% 12%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
     --border: 220 25% 15%;
     --input: 220 25% 12%;
     --ring: 200 100% 50%;
@@ -91,13 +108,24 @@
 
   body {
     @apply bg-background text-foreground;
-    background: var(--gradient-hero);
+    background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(220 13% 95%) 50%, hsl(200 50% 98%) 100%);
     min-height: 100vh;
+  }
+
+  .dark body {
+    background: var(--gradient-hero);
   }
 
   /* Custom utility classes */
   .gradient-text {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, hsl(200 100% 40%), hsl(220 100% 50%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dark .gradient-text {
+    background: linear-gradient(135deg, hsl(200 100% 60%), hsl(220 100% 70%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -108,6 +136,12 @@
   }
 
   .card-glow {
+    background: hsl(var(--card));
+    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.05);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .dark .card-glow {
     background: var(--gradient-card);
     box-shadow: var(--shadow-card);
     border: 1px solid hsl(var(--border));

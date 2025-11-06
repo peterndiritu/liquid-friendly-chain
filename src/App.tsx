@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ThirdwebProvider } from "thirdweb/react";
+import { ThemeProvider } from "next-themes";
 import LoadingScreen from "@/components/LoadingScreen";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -38,11 +39,12 @@ const App = () => {
   return (
     <ThirdwebProvider>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <LoadingScreen isLoading={isLoading} />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
+          <TooltipProvider>
+            <LoadingScreen isLoading={isLoading} />
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/technology" element={<Technology />} />
@@ -62,6 +64,7 @@ const App = () => {
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </ThirdwebProvider>
   );

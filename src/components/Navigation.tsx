@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import liquidChainLogo from "@/assets/liquid-chain-logo.png";
 import ExploreDropdown from "./ExploreDropdown";
+import { ThemeToggle } from "./ThemeToggle";
 import { ConnectButton } from "thirdweb/react";
 import { client } from "@/lib/thirdweb";
 import { ArrowRightLeft } from "lucide-react";
@@ -26,6 +27,7 @@ const Navigation = () => {
         
         <div className="flex items-center space-x-4">
           <ExploreDropdown />
+          <ThemeToggle />
           <Button
             variant="outline"
             onClick={() => navigate('/dex')}
