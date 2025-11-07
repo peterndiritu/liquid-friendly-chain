@@ -32,7 +32,7 @@ export const supportedChains = [
 ];
 
 // Default chain for initial connection
-export const defaultChain = bsc;
+export const defaultChain = polygon;
 
 // Export wallet options for the connect button
 export const wallets = [

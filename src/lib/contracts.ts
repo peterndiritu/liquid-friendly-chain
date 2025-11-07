@@ -1,17 +1,17 @@
 // Smart Contract Configuration for FLD Token and Airdrop
-// Update these addresses when contracts are deployed to BSC mainnet
+// Update these addresses when contracts are deployed to Polygon mainnet
 
 export const FLD_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000000"; // Placeholder
 export const AIRDROP_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Placeholder
 export const PRESALE_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Placeholder
-export const USDT_CONTRACT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955"; // BSC USDT
+export const USDT_CONTRACT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"; // Polygon USDT
 
 // FLD Token Price (in USD)
 export const FLD_PRICE_USD = 1.00;
 
-// Minimum and Maximum purchase amounts (in BNB)
-export const MIN_PURCHASE_BNB = 0.1;
-export const MAX_PURCHASE_BNB = 10;
+// Minimum and Maximum purchase amounts (in MATIC)
+export const MIN_PURCHASE_MATIC = 0.1;
+export const MAX_PURCHASE_MATIC = 10;
 
 // Sale Configuration
 export const SALE_HARD_CAP = 1000000; // $1M USDT

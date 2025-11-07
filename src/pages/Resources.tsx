@@ -34,14 +34,14 @@ const Resources = () => {
   ];
 
   const networkInfo = [
-    { label: "Chain ID", value: "56 (BSC Mainnet)" },
-    { label: "RPC Endpoint", value: "https://bsc-dataseed.binance.org/" },
-    { label: "Block Explorer", value: "https://bscscan.com" },
+    { label: "Chain ID", value: "137 (Polygon)" },
+    { label: "RPC Endpoint", value: "https://polygon-rpc.com/" },
+    { label: "Block Explorer", value: "https://polygonscan.com" },
     { label: "Symbol", value: "FLD" }
   ];
 
   const developerTools = [
-    { name: "Block Explorer", description: "View transactions and contracts", url: "https://bscscan.com" },
+    { name: "Block Explorer", description: "View transactions and contracts", url: "https://polygonscan.com" },
     { name: "Testnet Faucet", description: "Get testnet FLD tokens", url: "#faucet" },
     { name: "Contract Verifier", description: "Verify your smart contracts", url: "#verify" },
     { name: "Network Status", description: "Real-time network health", url: "#status" }
