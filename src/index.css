@@ -116,6 +116,10 @@
     background: var(--gradient-hero);
   }
 
+  body.loading {
+    overflow: hidden;
+  }
+
   /* Custom utility classes */
   .gradient-text {
     background: linear-gradient(135deg, hsl(200 100% 40%), hsl(220 100% 50%));

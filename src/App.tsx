@@ -28,13 +28,20 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Minimum loading time for smooth UX
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (isLoading) {
+      document.body.classList.add('loading');
+    } else {
+      document.body.classList.remove('loading');
+    }
+  }, [isLoading]);
 
   return (
     <ThirdwebProvider>
