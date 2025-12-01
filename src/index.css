@@ -183,4 +183,47 @@
   .btn-gradient-outline:hover {
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
   }
+
+  /* Purchase Widget with Gradient Border */
+  .purchase-widget-card {
+    @apply relative overflow-hidden;
+    background: hsl(var(--card));
+  }
+
+  .purchase-widget-card::before {
+    content: '';
+    @apply absolute inset-0 -z-10 rounded-lg;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, #f97316 50%, hsl(var(--primary)) 100%);
+    padding: 2px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes border-glow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Token Card Styles */
+  .token-card {
+    @apply rounded-xl bg-card/80 backdrop-blur-sm border border-border/50 p-4 cursor-pointer transition-all duration-200;
+  }
+
+  .token-card:hover {
+    @apply scale-105 border-primary/30 bg-card/90;
+  }
+
+  .token-card.selected {
+    @apply border-primary border-2 shadow-lg shadow-primary/20 bg-card;
+  }
+
+  /* Orange Gradient Buy Button */
+  .buy-button-gradient {
+    @apply bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500;
+    @apply hover:from-orange-700 hover:via-orange-600 hover:to-amber-600;
+    @apply shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40;
+    @apply text-white font-bold;
+  }
 }
