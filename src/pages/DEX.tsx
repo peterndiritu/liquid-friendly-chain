@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import WalletConnection from "@/components/WalletConnection";
 import DexStats from "@/components/DexStats";
 import TransactionHistory from "@/components/TransactionHistory";
-import PurchaseModal from "@/components/PurchaseModal";
 import AirdropClaimDialog from "@/components/AirdropClaimDialog";
 import NetworkSwitcher from "@/components/NetworkSwitcher";
 import TokenBalances from "@/components/TokenBalances";
@@ -12,6 +11,7 @@ import PortfolioValue from "@/components/PortfolioValue";
 import SalesProgressCard from "@/components/SalesProgressCard";
 import AirdropProgressCard from "@/components/AirdropProgressCard";
 import USDTCollectionTracker from "@/components/USDTCollectionTracker";
+import IntegratedPurchaseWidget from "@/components/IntegratedPurchaseWidget";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { useSalesProgress } from "@/hooks/useSalesProgress";
 import { useAirdropProgress } from "@/hooks/useAirdropProgress";
@@ -22,11 +22,9 @@ import { useTokenPurchase } from "@/hooks/useTokenPurchase";
 import { useAirdropClaim } from "@/hooks/useAirdropClaim";
 import { useTransactionHistory } from "@/hooks/useTransactionHistory";
 import { useTokenPrices } from "@/hooks/useTokenPrices";
-import { ShoppingCart, Gift, ArrowRightLeft } from "lucide-react";
-import { FLD_PRICE_USD } from "@/lib/contracts";
+import { Gift, ArrowRightLeft } from "lucide-react";
 
 const DEX = () => {
-const [purchaseModalOpen, setPurchaseModalOpen] = useState(false);
 const [airdropDialogOpen, setAirdropDialogOpen] = useState(false);
 
 const { isConnected, address } = useWalletStatus();
@@ -62,7 +60,6 @@ const balance = (parseFloat(totalPurchased) + parseFloat(totalClaimed)).toFixed(
 const handlePurchase = async (tokenAmount: number, tokenSymbol: string) => {
 const result = await buyTokens(tokenAmount, tokenSymbol);
 if (result) {
-setPurchaseModalOpen(false);
 refreshHistory();
 }
 };
@@ -118,13 +115,21 @@ return (
         </div>  
 
         {/* Progress Cards */}  
-        <div className="grid lg:grid-cols-2 gap-6 mb-8 animate-fade-in">  
+        <div className="grid lg:grid-cols-2 gap-6 mb-10 animate-fade-in">  
           <SalesProgressCard data={salesProgress} />  
           <AirdropProgressCard data={airdropProgress} />  
         </div>  
 
+        {/* Integrated Purchase Widget - Full Width Feature */}
+        <div className="mb-10">
+          <IntegratedPurchaseWidget 
+            onPurchase={handlePurchase}
+            isLoading={isPurchasing}
+          />
+        </div>
+
         {/* Main Grid Layout */}  
-        <div className="grid lg:grid-cols-3 gap-6 mb-8">  
+        <div className="grid lg:grid-cols-3 gap-6 mb-10">  
           {/* Left Column: Portfolio & Token Balances */}  
           <div className="lg:col-span-1 space-y-6">  
             <PortfolioValue   
@@ -136,7 +141,7 @@ return (
             <TokenBalances />  
           </div>  
 
-          {/* Right Column: FLD Stats & Actions */}  
+          {/* Right Column: FLD Stats & Claim */}  
           <div className="lg:col-span-2 space-y-6">  
             {/* Stats Dashboard */}  
             <DexStats   
@@ -146,78 +151,45 @@ return (
               address={address || ""}  
             />  
 
-            {/* Action Cards */}  
-            <div className="grid md:grid-cols-2 gap-6 animate-scale-in">  
-          {/* Buy Card */}  
-          <Card className="card-glow hover:scale-105 transition-transform">  
-            <CardHeader>  
-              <CardTitle className="flex items-center gap-2">  
-                <ShoppingCart className="w-5 h-5 text-primary" />  
-                Buy FLD Tokens  
-              </CardTitle>  
-              <CardDescription>  
-                Purchase FLD tokens with BNB  
-              </CardDescription>  
-            </CardHeader>  
-            <CardContent>  
-              <div className="space-y-4">  
-                <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">  
-                  <p className="text-sm text-muted-foreground mb-1">Current Price</p>  
-                  <p className="text-2xl font-bold text-primary">${FLD_PRICE_USD} USD</p>  
-                  <p className="text-xs text-muted-foreground mt-1">per FLD token</p>  
-                </div>  
-                <Button   
-                  className="w-full button-glow"   
-                  size="lg"  
-                  onClick={() => setPurchaseModalOpen(true)}  
-                >  
-                  <ShoppingCart className="w-4 h-4 mr-2" />  
-                  Buy Now  
-                </Button>  
-              </div>  
-            </CardContent>  
-          </Card>  
-
-          {/* Claim Card */}  
-          <Card className="card-glow hover:scale-105 transition-transform">  
-            <CardHeader>  
-              <CardTitle className="flex items-center gap-2">  
-                <Gift className="w-5 h-5 text-blue-500" />  
-                Claim Airdrop  
-              </CardTitle>  
-              <CardDescription>  
-                {isEligible ? `${claimableAmount} FLD available` : 'Check eligibility'}  
-              </CardDescription>  
-            </CardHeader>  
-            <CardContent>  
-              <div className="space-y-4">  
-                <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/10">  
-                  <p className="text-sm text-muted-foreground mb-1">Status</p>  
-                  <p className="text-2xl font-bold text-blue-500">  
-                    {isClaimed ? 'Claimed ✓' : isEligible ? 'Eligible' : 'Not Eligible'}  
-                  </p>  
-                  {isEligible && !isClaimed && (  
-                    <p className="text-xs text-muted-foreground mt-1">  
-                      Claim {claimableAmount} FLD tokens  
+            {/* Claim Airdrop Card */}  
+            <Card className="card-glow hover:scale-105 transition-transform animate-scale-in">  
+              <CardHeader>  
+                <CardTitle className="flex items-center gap-2">  
+                  <Gift className="w-5 h-5 text-blue-500" />  
+                  Claim Airdrop  
+                </CardTitle>  
+                <CardDescription>  
+                  {isEligible ? `${claimableAmount} FLD available` : 'Check eligibility'}  
+                </CardDescription>  
+              </CardHeader>  
+              <CardContent>  
+                <div className="space-y-4">  
+                  <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/10">  
+                    <p className="text-sm text-muted-foreground mb-1">Status</p>  
+                    <p className="text-2xl font-bold text-blue-500">  
+                      {isClaimed ? 'Claimed ✓' : isEligible ? 'Eligible' : 'Not Eligible'}  
                     </p>  
-                  )}  
+                    {isEligible && !isClaimed && (  
+                      <p className="text-xs text-muted-foreground mt-1">  
+                        Claim {claimableAmount} FLD tokens  
+                      </p>  
+                    )}  
+                  </div>  
+                  <Button   
+                    className="w-full"  
+                    size="lg"  
+                    onClick={() => setAirdropDialogOpen(true)}  
+                    disabled={isClaimed || !isEligible}  
+                    variant={isClaimed ? "secondary" : "default"}  
+                  >  
+                    <Gift className="w-4 h-4 mr-2" />  
+                    {isClaimed ? 'Already Claimed' : 'Claim Now'}  
+                  </Button>  
                 </div>  
-                <Button   
-                  className="w-full"  
-                  size="lg"  
-                  onClick={() => setAirdropDialogOpen(true)}  
-                  disabled={isClaimed || !isEligible}  
-                  variant={isClaimed ? "secondary" : "default"}  
-                >  
-                  <Gift className="w-4 h-4 mr-2" />  
-                  {isClaimed ? 'Already Claimed' : 'Claim Now'}  
-                </Button>  
-              </div>  
-            </CardContent>  
-          </Card>  
-            </div>  
+              </CardContent>  
+            </Card>  
           </div>  
-        </div>  
+        </div>
 
         {/* Transaction History */}  
         <div className="animate-fade-in">  
@@ -232,15 +204,8 @@ return (
   </main>  
 
   <Footer />  
-
-  {/* Modals */}  
-  <PurchaseModal   
-    open={purchaseModalOpen}  
-    onOpenChange={setPurchaseModalOpen}  
-    onPurchase={handlePurchase}  
-    isLoading={isPurchasing}  
-  />  
     
+  {/* Airdrop Claim Dialog */}
   <AirdropClaimDialog  
     open={airdropDialogOpen}  
     onOpenChange={setAirdropDialogOpen}  
