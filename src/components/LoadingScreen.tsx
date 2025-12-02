@@ -1,4 +1,4 @@
-import liquidChainLogo from "@/assets/liquid-chain-logo.png";
+import fluidLogo from "@/assets/fluid-logo.png";
 import { useEffect, useState } from "react";
 
 interface LoadingScreenProps {
@@ -36,7 +36,7 @@ const LoadingScreen = ({ isLoading }: LoadingScreenProps) => {
         {/* Logo */}
         <div className="relative z-10">
           <img 
-            src={liquidChainLogo} 
+            src={fluidLogo} 
             alt="Fluid Network Logo" 
             className="w-16 h-16 animate-float"
           />

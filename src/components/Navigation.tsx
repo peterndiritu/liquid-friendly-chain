@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import liquidChainLogo from "@/assets/liquid-chain-logo.png";
+import fluidLogo from "@/assets/fluid-logo.png";
 import ExploreDropdown from "./ExploreDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import { ConnectButton } from "thirdweb/react";
@@ -15,7 +15,7 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
           <img 
-            src={liquidChainLogo} 
+            src={fluidLogo} 
             alt="Fluid Network Logo" 
             className="w-10 h-10 animate-float"
           />
