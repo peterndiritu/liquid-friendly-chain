@@ -1,5 +1,5 @@
 import { useReadContract } from "thirdweb/react";
-import { AIRDROP_CONTRACT_ADDRESS, AIRDROP_ABI, TOTAL_AIRDROP_ALLOCATION } from "@/lib/contracts";
+import { AIRDROP_CONTRACT_ADDRESS, TOTAL_AIRDROP_ALLOCATION } from "@/lib/contracts";
 import { client } from "@/lib/thirdweb";
 import { defineChain, getContract } from "thirdweb";
 import { useEffect, useState } from "react";
@@ -25,73 +25,66 @@ export const useAirdropProgress = () => {
     error: null,
   });
 
-  // For MVP: Using mock data until contracts are deployed
-  // When contracts are ready, uncomment the useReadContract hooks below
-  
-  useEffect(() => {
-    // Simulate fetching data
-    const mockClaimed = 1250000; // 1.25M claimed
-    const mockData = {
-      totalAllocation: TOTAL_AIRDROP_ALLOCATION,
-      totalClaimed: mockClaimed,
-      remainingAllocation: TOTAL_AIRDROP_ALLOCATION - mockClaimed,
-      progressPercentage: (mockClaimed / TOTAL_AIRDROP_ALLOCATION) * 100,
-      uniqueClaimers: 1847, // Mock number of claimers
-      isLoading: false,
-      error: null,
-    };
-    
-    // Simulate network delay
-    setTimeout(() => {
-      setAirdropData(mockData);
-    }, 1000);
-  }, []);
-
-  /* 
-  // PRODUCTION CODE - Uncomment when contracts are deployed:
-  
   const contract = getContract({
     client,
-    chain: defineChain(56), // BSC Mainnet
+    chain: defineChain(137), // Polygon Mainnet
     address: AIRDROP_CONTRACT_ADDRESS,
   });
 
-  const { data: totalAllocation, isLoading: isLoadingAllocation } = useReadContract({
+  const { data: totalAllocation, isLoading: isLoadingAllocation, error: allocationError } = useReadContract({
     contract,
     method: "function totalAllocation() view returns (uint256)",
     params: [],
   });
 
-  const { data: totalClaimed, isLoading: isLoadingClaimed } = useReadContract({
+  const { data: totalClaimed, isLoading: isLoadingClaimed, error: claimedError } = useReadContract({
     contract,
     method: "function totalClaimed() view returns (uint256)",
     params: [],
   });
 
-  const { data: remaining } = useReadContract({
+  const { data: remaining, error: remainingError } = useReadContract({
     contract,
     method: "function getRemainingAllocation() view returns (uint256)",
     params: [],
   });
 
+  const { data: claimProgress, error: progressError } = useReadContract({
+    contract,
+    method: "function getClaimProgress() view returns (uint256)",
+    params: [],
+  });
+
   useEffect(() => {
-    if (totalAllocation && totalClaimed !== undefined) {
-      const allocation = Number(totalAllocation) / 1e18; // Convert from wei
-      const claimed = Number(totalClaimed) / 1e18;
-      const remainingAmount = remaining ? Number(remaining) / 1e18 : allocation - claimed;
-      
-      setAirdropData({
-        totalAllocation: allocation,
-        totalClaimed: claimed,
-        remainingAllocation: remainingAmount,
-        progressPercentage: (claimed / allocation) * 100,
-        uniqueClaimers: 0, // Would need separate tracking
-        isLoading: isLoadingAllocation || isLoadingClaimed,
-        error: null,
-      });
+    const isLoading = isLoadingAllocation || isLoadingClaimed;
+    const hasError = allocationError || claimedError || remainingError || progressError;
+
+    if (hasError) {
+      setAirdropData(prev => ({
+        ...prev,
+        isLoading: false,
+        error: "Failed to fetch airdrop data from contract",
+      }));
+      return;
     }
-  }, [totalAllocation, totalClaimed, remaining, isLoadingAllocation, isLoadingClaimed]);
-  */
+
+    // FLD uses 18 decimals
+    const allocation = totalAllocation ? Number(totalAllocation) / 1e18 : TOTAL_AIRDROP_ALLOCATION;
+    const claimed = totalClaimed ? Number(totalClaimed) / 1e18 : 0;
+    const remainingAmount = remaining ? Number(remaining) / 1e18 : allocation - claimed;
+    // claimProgress returns unique claimers count or percentage
+    const claimers = claimProgress ? Number(claimProgress) : 0;
+    
+    setAirdropData({
+      totalAllocation: allocation,
+      totalClaimed: claimed,
+      remainingAllocation: remainingAmount,
+      progressPercentage: allocation > 0 ? (claimed / allocation) * 100 : 0,
+      uniqueClaimers: claimers,
+      isLoading,
+      error: null,
+    });
+  }, [totalAllocation, totalClaimed, remaining, claimProgress, isLoadingAllocation, isLoadingClaimed, allocationError, claimedError, remainingError, progressError]);
 
   return airdropData;
 };

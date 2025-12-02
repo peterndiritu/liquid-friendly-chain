@@ -1,5 +1,5 @@
 import { useReadContract } from "thirdweb/react";
-import { PRESALE_CONTRACT_ADDRESS, PRESALE_ABI, SALE_HARD_CAP, SALE_SOFT_CAP } from "@/lib/contracts";
+import { PRESALE_CONTRACT_ADDRESS, SALE_HARD_CAP, SALE_SOFT_CAP } from "@/lib/contracts";
 import { client } from "@/lib/thirdweb";
 import { defineChain, getContract } from "thirdweb";
 import { useEffect, useState } from "react";
@@ -27,86 +27,72 @@ export const useSalesProgress = () => {
     error: null,
   });
 
-  // For MVP: Using mock data until contracts are deployed
-  // When contracts are ready, uncomment the useReadContract hooks below
-  
-  useEffect(() => {
-    // Simulate fetching data
-    const mockData = {
-      totalUSDTRaised: 450000, // $450K raised
-      totalFLDSold: 450000, // 450K FLD sold
-      hardCap: SALE_HARD_CAP,
-      softCap: SALE_SOFT_CAP,
-      progressPercentage: (450000 / SALE_HARD_CAP) * 100,
-      isActive: true,
-      isLoading: false,
-      error: null,
-    };
-    
-    // Simulate network delay
-    setTimeout(() => {
-      setSalesData(mockData);
-    }, 1000);
-  }, []);
-
-  /* 
-  // PRODUCTION CODE - Uncomment when contracts are deployed:
-  
   const contract = getContract({
     client,
-    chain: defineChain(56), // BSC Mainnet
+    chain: defineChain(137), // Polygon Mainnet
     address: PRESALE_CONTRACT_ADDRESS,
   });
 
-  const { data: totalRaised, isLoading: isLoadingRaised } = useReadContract({
+  const { data: totalRaised, isLoading: isLoadingRaised, error: raisedError } = useReadContract({
     contract,
     method: "function totalUSDTRaised() view returns (uint256)",
     params: [],
   });
 
-  const { data: totalSold, isLoading: isLoadingSold } = useReadContract({
+  const { data: totalSold, isLoading: isLoadingSold, error: soldError } = useReadContract({
     contract,
     method: "function totalFLDSold() view returns (uint256)",
     params: [],
   });
 
-  const { data: isActive, isLoading: isLoadingActive } = useReadContract({
+  const { data: isActive, isLoading: isLoadingActive, error: activeError } = useReadContract({
     contract,
     method: "function saleActive() view returns (bool)",
     params: [],
   });
 
-  const { data: hardCap } = useReadContract({
+  const { data: hardCapData, error: hardCapError } = useReadContract({
     contract,
     method: "function hardCap() view returns (uint256)",
     params: [],
   });
 
-  const { data: softCap } = useReadContract({
+  const { data: softCapData, error: softCapError } = useReadContract({
     contract,
     method: "function softCap() view returns (uint256)",
     params: [],
   });
 
   useEffect(() => {
-    if (totalRaised && hardCap) {
-      const raised = Number(totalRaised) / 1e18; // Convert from wei
-      const cap = Number(hardCap) / 1e18;
-      const sold = totalSold ? Number(totalSold) / 1e18 : 0;
-      
-      setSalesData({
-        totalUSDTRaised: raised,
-        totalFLDSold: sold,
-        hardCap: cap,
-        softCap: softCap ? Number(softCap) / 1e18 : SALE_SOFT_CAP,
-        progressPercentage: (raised / cap) * 100,
-        isActive: isActive ?? true,
-        isLoading: isLoadingRaised || isLoadingSold || isLoadingActive,
-        error: null,
-      });
+    const isLoading = isLoadingRaised || isLoadingSold || isLoadingActive;
+    const hasError = raisedError || soldError || activeError || hardCapError || softCapError;
+
+    if (hasError) {
+      setSalesData(prev => ({
+        ...prev,
+        isLoading: false,
+        error: "Failed to fetch presale data from contract",
+      }));
+      return;
     }
-  }, [totalRaised, totalSold, hardCap, softCap, isActive, isLoadingRaised, isLoadingSold, isLoadingActive]);
-  */
+
+    // USDT on Polygon uses 6 decimals
+    const raised = totalRaised ? Number(totalRaised) / 1e6 : 0;
+    const sold = totalSold ? Number(totalSold) / 1e18 : 0; // FLD uses 18 decimals
+    const cap = hardCapData ? Number(hardCapData) / 1e6 : SALE_HARD_CAP;
+    const soft = softCapData ? Number(softCapData) / 1e6 : SALE_SOFT_CAP;
+    
+    setSalesData({
+      totalUSDTRaised: raised,
+      totalFLDSold: sold,
+      hardCap: cap,
+      softCap: soft,
+      progressPercentage: cap > 0 ? (raised / cap) * 100 : 0,
+      isActive: isActive ?? true,
+      isLoading,
+      error: null,
+    });
+  }, [totalRaised, totalSold, hardCapData, softCapData, isActive, isLoadingRaised, isLoadingSold, isLoadingActive, raisedError, soldError, activeError, hardCapError, softCapError]);
 
   return salesData;
 };
