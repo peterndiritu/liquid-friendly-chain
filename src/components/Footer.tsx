@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import liquidChainLogo from "@/assets/liquid-chain-logo.png";
+import fluidLogo from "@/assets/fluid-logo.png";
 import { 
   Twitter, 
   Github, 
@@ -65,7 +65,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2 animate-fade-in">
             <div className="flex items-center space-x-3 mb-6">
-              <img src={liquidChainLogo} alt="Fluid Network" className="w-12 h-12" />
+              <img src={fluidLogo} alt="Fluid Network" className="w-12 h-12" />
               <div>
                 <h3 className="text-xl font-bold gradient-text">Fluid Network</h3>
                 <p className="text-sm text-muted-foreground">FLD Token</p>
