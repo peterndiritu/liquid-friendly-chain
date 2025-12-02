@@ -1,5 +1,5 @@
 // Smart Contract Configuration for FLD Token and Airdrop
-// Update these addresses when contracts are deployed to Polygon mainnet
+// Deployed on Polygon Mainnet (Chain ID: 137)
 
 export const FLD_TOKEN_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Fluid Token (FLD) on Polygon
 export const AIRDROP_CONTRACT_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Placeholder
