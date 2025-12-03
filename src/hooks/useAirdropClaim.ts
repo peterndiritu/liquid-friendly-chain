@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useActiveAccount, useReadContract, useSendTransaction } from "thirdweb/react";
 import { defineChain, getContract, prepareContractCall } from "thirdweb";
 import { toast } from "@/hooks/use-toast";
 import { saveTransaction } from "@/lib/transactionStorage";
 import { client } from "@/lib/thirdweb";
 import { AIRDROP_CONTRACT_ADDRESS } from "@/lib/contracts";
+import { TransactionResult } from "@/components/TransactionConfirmationModal";
 
 export const useAirdropClaim = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [lastTransaction, setLastTransaction] = useState<TransactionResult | null>(null);
   const account = useActiveAccount();
   const { mutateAsync: sendTransaction } = useSendTransaction();
 
@@ -43,6 +45,8 @@ export const useAirdropClaim = () => {
   // Convert from wei (18 decimals) to readable format
   const claimableAmount = claimableData ? (Number(claimableData) / 1e18).toFixed(2) : "0";
 
+  const clearLastTransaction = () => setLastTransaction(null);
+
   const claimAirdrop = async () => {
     if (!account) {
       toast({
@@ -72,6 +76,7 @@ export const useAirdropClaim = () => {
     }
 
     setIsLoading(true);
+    setLastTransaction(null);
 
     try {
       // Prepare the claim transaction
@@ -102,6 +107,15 @@ export const useAirdropClaim = () => {
         refetchClaimable(),
       ]);
 
+      // Set successful transaction result
+      setLastTransaction({
+        success: true,
+        hash: result.transactionHash,
+        type: 'claim',
+        amount: claimableAmount,
+        tokenSymbol: 'FLD',
+      });
+
       toast({
         title: "Airdrop Claimed!",
         description: `Successfully claimed ${claimableAmount} FLD tokens`,
@@ -110,6 +124,8 @@ export const useAirdropClaim = () => {
       return true;
     } catch (error) {
       console.error("Claim error:", error);
+      
+      const errorMessage = error instanceof Error ? error.message : "Transaction failed";
       
       // Save failed transaction
       saveTransaction({
@@ -122,9 +138,16 @@ export const useAirdropClaim = () => {
         to: account.address,
       }, account.address);
 
+      // Set failed transaction result
+      setLastTransaction({
+        success: false,
+        type: 'claim',
+        error: errorMessage,
+      });
+
       toast({
         title: "Claim Failed",
-        description: error instanceof Error ? error.message : "Transaction failed",
+        description: errorMessage,
         variant: "destructive",
       });
       return false;
@@ -139,5 +162,7 @@ export const useAirdropClaim = () => {
     isEligible,
     isClaimed,
     claimableAmount,
+    lastTransaction,
+    clearLastTransaction,
   };
 };

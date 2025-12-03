@@ -220,7 +220,7 @@ const TransactionHistory = ({ transactions, isLoading, onRefresh }: TransactionH
                           asChild
                         >
                           <a
-                            href={`https://bscscan.com/tx/${tx.hash}`}
+                            href={`https://polygonscan.com/tx/${tx.hash}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
