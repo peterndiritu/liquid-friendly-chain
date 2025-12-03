@@ -5,6 +5,7 @@ import { toast } from "@/hooks/use-toast";
 import { saveTransaction } from "@/lib/transactionStorage";
 import { FLD_PRICE_USD, PRESALE_CONTRACT_ADDRESS, USDT_CONTRACT_ADDRESS } from "@/lib/contracts";
 import { client } from "@/lib/thirdweb";
+import { TransactionResult } from "@/components/TransactionConfirmationModal";
 
 // Token prices (approximate USD values) for conversion calculations
 const TOKEN_PRICES: Record<string, number> = {
@@ -30,8 +31,11 @@ const TOKEN_DECIMALS: Record<string, number> = {
 
 export const useTokenPurchase = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [lastTransaction, setLastTransaction] = useState<TransactionResult | null>(null);
   const account = useActiveAccount();
   const { mutateAsync: sendTransaction } = useSendTransaction();
+
+  const clearLastTransaction = () => setLastTransaction(null);
 
   const buyTokens = async (tokenAmount: number, tokenSymbol: string = "USDT") => {
     if (!account) {
@@ -44,6 +48,7 @@ export const useTokenPurchase = () => {
     }
 
     setIsLoading(true);
+    setLastTransaction(null);
     
     try {
       // Calculate FLD amount based on token price and FLD price
@@ -119,6 +124,15 @@ export const useTokenPurchase = () => {
           to: PRESALE_CONTRACT_ADDRESS,
         }, account.address);
 
+        // Set successful transaction result
+        setLastTransaction({
+          success: true,
+          hash: purchaseResult.transactionHash,
+          type: 'purchase',
+          amount: fldAmount,
+          tokenSymbol: 'FLD',
+        });
+
         toast({
           title: "Purchase Successful!",
           description: `Successfully purchased ${fldAmount} FLD tokens with ${tokenAmount} ${tokenSymbol}`,
@@ -127,8 +141,6 @@ export const useTokenPurchase = () => {
         return true;
       } else {
         // For native token purchases (ETH, MATIC, BNB, etc.)
-        // This would require a different contract method like buyWithNative()
-        // For now, show a message that only stablecoin purchases are supported
         toast({
           title: "Payment Method Not Supported",
           description: "Currently only USDT and USDC purchases are supported. Please select USDT or USDC.",
@@ -138,6 +150,8 @@ export const useTokenPurchase = () => {
       }
     } catch (error) {
       console.error("Purchase error:", error);
+      
+      const errorMessage = error instanceof Error ? error.message : "Transaction failed";
       
       // Save failed transaction
       if (account) {
@@ -152,9 +166,16 @@ export const useTokenPurchase = () => {
         }, account.address);
       }
 
+      // Set failed transaction result
+      setLastTransaction({
+        success: false,
+        type: 'purchase',
+        error: errorMessage,
+      });
+
       toast({
         title: "Purchase Failed",
-        description: error instanceof Error ? error.message : "Transaction failed",
+        description: errorMessage,
         variant: "destructive",
       });
       return false;
@@ -166,5 +187,7 @@ export const useTokenPurchase = () => {
   return {
     buyTokens,
     isLoading,
+    lastTransaction,
+    clearLastTransaction,
   };
 };

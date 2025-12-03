@@ -12,6 +12,7 @@ import SalesProgressCard from "@/components/SalesProgressCard";
 import AirdropProgressCard from "@/components/AirdropProgressCard";
 import USDTCollectionTracker from "@/components/USDTCollectionTracker";
 import IntegratedPurchaseWidget from "@/components/IntegratedPurchaseWidget";
+import TransactionConfirmationModal from "@/components/TransactionConfirmationModal";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { useSalesProgress } from "@/hooks/useSalesProgress";
 import { useAirdropProgress } from "@/hooks/useAirdropProgress";
@@ -28,13 +29,15 @@ const DEX = () => {
 const [airdropDialogOpen, setAirdropDialogOpen] = useState(false);
 
 const { isConnected, address } = useWalletStatus();
-const { buyTokens, isLoading: isPurchasing } = useTokenPurchase();
+const { buyTokens, isLoading: isPurchasing, lastTransaction: purchaseTransaction, clearLastTransaction: clearPurchaseTransaction } = useTokenPurchase();
 const {
 claimAirdrop,
 isLoading: isClaiming,
 isEligible,
 isClaimed,
-claimableAmount
+claimableAmount,
+lastTransaction: claimTransaction,
+clearLastTransaction: clearClaimTransaction
 } = useAirdropClaim();
 const { transactions, isLoading: isLoadingHistory, refreshHistory } = useTransactionHistory();
 const { balances, isLoading: isLoadingBalances } = useTokenBalances();
@@ -56,6 +59,16 @@ const totalClaimed = transactions
 .toFixed(2);
 
 const balance = (parseFloat(totalPurchased) + parseFloat(totalClaimed)).toFixed(2);
+
+// Active transaction for modal
+const activeTransaction = purchaseTransaction || claimTransaction;
+const isTransactionPending = isPurchasing || isClaiming;
+
+const handleCloseTransactionModal = () => {
+  clearPurchaseTransaction();
+  clearClaimTransaction();
+  refreshHistory();
+};
 
 const handlePurchase = async (tokenAmount: number, tokenSymbol: string) => {
 const result = await buyTokens(tokenAmount, tokenSymbol);
@@ -214,7 +227,15 @@ return (
     isEligible={isEligible}  
     isClaimed={isClaimed}  
     claimableAmount={claimableAmount}  
-  />  
+  />
+
+  {/* Transaction Confirmation Modal */}
+  <TransactionConfirmationModal
+    open={!!activeTransaction || isTransactionPending}
+    onClose={handleCloseTransactionModal}
+    transaction={activeTransaction}
+    isPending={isTransactionPending && !activeTransaction}
+  />
 </div>
 
 );
