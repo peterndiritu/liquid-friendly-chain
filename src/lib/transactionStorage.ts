@@ -34,6 +34,25 @@ export const getTransactions = (address: string): Transaction[] => {
   }
 };
 
+export const updateTransactionStatus = (
+  address: string,
+  hash: string,
+  updates: Partial<Transaction>
+): void => {
+  try {
+    const transactions = getTransactions(address);
+    const updated = transactions.map(tx => 
+      tx.hash.toLowerCase() === hash.toLowerCase() 
+        ? { ...tx, ...updates } 
+        : tx
+    );
+    const key = STORAGE_KEY + address.toLowerCase();
+    localStorage.setItem(key, JSON.stringify(updated));
+  } catch (error) {
+    console.error('Failed to update transaction:', error);
+  }
+};
+
 export const clearTransactions = (address: string): void => {
   try {
     const key = STORAGE_KEY + address.toLowerCase();
@@ -44,7 +63,7 @@ export const clearTransactions = (address: string): void => {
 };
 
 export const exportTransactionsToCSV = (transactions: Transaction[]): void => {
-  const headers = ['Hash', 'Type', 'Amount', 'Date', 'Status', 'From', 'To'];
+  const headers = ['Hash', 'Type', 'Amount', 'Date', 'Status', 'From', 'To', 'Block'];
   const rows = transactions.map(tx => [
     tx.hash,
     tx.type,
@@ -53,6 +72,7 @@ export const exportTransactionsToCSV = (transactions: Transaction[]): void => {
     tx.status,
     tx.from,
     tx.to,
+    tx.blockNumber?.toString() || '',
   ]);
   
   const csv = [

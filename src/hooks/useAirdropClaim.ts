@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useActiveAccount, useReadContract, useSendTransaction } from "thirdweb/react";
-import { defineChain, getContract, prepareContractCall } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, waitForReceipt } from "thirdweb";
 import { toast } from "@/hooks/use-toast";
-import { saveTransaction } from "@/lib/transactionStorage";
+import { saveTransaction, updateTransactionStatus } from "@/lib/transactionStorage";
 import { client } from "@/lib/thirdweb";
 import { AIRDROP_CONTRACT_ADDRESS } from "@/lib/contracts";
 import { TransactionResult } from "@/components/TransactionConfirmationModal";
+
+const POLYGON_CHAIN = defineChain(137);
 
 export const useAirdropClaim = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +17,7 @@ export const useAirdropClaim = () => {
 
   const contract = getContract({
     client,
-    chain: defineChain(137), // Polygon Mainnet
+    chain: POLYGON_CHAIN,
     address: AIRDROP_CONTRACT_ADDRESS,
   });
 
@@ -89,16 +91,42 @@ export const useAirdropClaim = () => {
       // Send the transaction
       const result = await sendTransaction(transaction);
       
-      // Save transaction to history
+      // Save transaction to history with pending status
       saveTransaction({
         hash: result.transactionHash,
         type: 'claim',
         amount: claimableAmount,
         timestamp: Date.now(),
-        status: 'success',
+        status: 'pending',
         from: AIRDROP_CONTRACT_ADDRESS,
         to: account.address,
       }, account.address);
+
+      // Set transaction as submitted immediately for UI feedback
+      setLastTransaction({
+        success: true,
+        hash: result.transactionHash,
+        type: 'claim',
+        amount: claimableAmount,
+        tokenSymbol: 'FLD',
+        status: 'submitted',
+      });
+
+      // Wait for transaction confirmation
+      const receipt = await waitForReceipt({
+        client,
+        chain: POLYGON_CHAIN,
+        transactionHash: result.transactionHash,
+      });
+
+      const isSuccess = receipt.status === 'success';
+
+      // Update transaction status in storage
+      updateTransactionStatus(account.address, result.transactionHash, {
+        status: isSuccess ? 'success' : 'failed',
+        blockNumber: Number(receipt.blockNumber),
+        gasUsed: receipt.gasUsed?.toString(),
+      });
 
       // Refetch data to update UI
       await Promise.all([
@@ -107,21 +135,28 @@ export const useAirdropClaim = () => {
         refetchClaimable(),
       ]);
 
-      // Set successful transaction result
+      // Update transaction result with confirmation
       setLastTransaction({
-        success: true,
+        success: isSuccess,
         hash: result.transactionHash,
         type: 'claim',
         amount: claimableAmount,
         tokenSymbol: 'FLD',
+        status: isSuccess ? 'confirmed' : 'failed',
+        blockNumber: Number(receipt.blockNumber),
+        confirmations: 1,
       });
 
-      toast({
-        title: "Airdrop Claimed!",
-        description: `Successfully claimed ${claimableAmount} FLD tokens`,
-      });
+      if (isSuccess) {
+        toast({
+          title: "Airdrop Claimed!",
+          description: `Successfully claimed ${claimableAmount} FLD tokens`,
+        });
+      } else {
+        throw new Error('Claim transaction reverted');
+      }
       
-      return true;
+      return isSuccess;
     } catch (error) {
       console.error("Claim error:", error);
       
@@ -143,6 +178,7 @@ export const useAirdropClaim = () => {
         success: false,
         type: 'claim',
         error: errorMessage,
+        status: 'failed',
       });
 
       toast({

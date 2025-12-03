@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
-import { defineChain, getContract, prepareContractCall } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, waitForReceipt } from "thirdweb";
 import { toast } from "@/hooks/use-toast";
-import { saveTransaction } from "@/lib/transactionStorage";
+import { saveTransaction, updateTransactionStatus } from "@/lib/transactionStorage";
 import { FLD_PRICE_USD, PRESALE_CONTRACT_ADDRESS, USDT_CONTRACT_ADDRESS } from "@/lib/contracts";
 import { client } from "@/lib/thirdweb";
 import { TransactionResult } from "@/components/TransactionConfirmationModal";
@@ -28,6 +28,8 @@ const TOKEN_DECIMALS: Record<string, number> = {
   POL: 18,
   AVAX: 18,
 };
+
+const POLYGON_CHAIN = defineChain(137);
 
 export const useTokenPurchase = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -64,13 +66,13 @@ export const useTokenPurchase = () => {
       if (tokenSymbol === "USDT" || tokenSymbol === "USDC") {
         const usdtContract = getContract({
           client,
-          chain: defineChain(137), // Polygon Mainnet
+          chain: POLYGON_CHAIN,
           address: USDT_CONTRACT_ADDRESS,
         });
 
         const presaleContract = getContract({
           client,
-          chain: defineChain(137),
+          chain: POLYGON_CHAIN,
           address: PRESALE_CONTRACT_ADDRESS,
         });
 
@@ -88,16 +90,33 @@ export const useTokenPurchase = () => {
 
         const approvalResult = await sendTransaction(approveTransaction);
         
-        // Save approval transaction
+        // Save approval transaction with pending status
         saveTransaction({
           hash: approvalResult.transactionHash,
           type: 'approve',
           amount: tokenAmount.toString(),
           timestamp: Date.now(),
-          status: 'success',
+          status: 'pending',
           from: account.address,
           to: USDT_CONTRACT_ADDRESS,
         }, account.address);
+
+        // Wait for approval confirmation
+        const approvalReceipt = await waitForReceipt({
+          client,
+          chain: POLYGON_CHAIN,
+          transactionHash: approvalResult.transactionHash,
+        });
+
+        // Update approval transaction status
+        updateTransactionStatus(account.address, approvalResult.transactionHash, {
+          status: approvalReceipt.status === 'success' ? 'success' : 'failed',
+          blockNumber: Number(approvalReceipt.blockNumber),
+        });
+
+        if (approvalReceipt.status !== 'success') {
+          throw new Error('Approval transaction failed');
+        }
 
         toast({
           title: "Approval Successful",
@@ -113,32 +132,65 @@ export const useTokenPurchase = () => {
 
         const purchaseResult = await sendTransaction(buyTransaction);
         
-        // Save purchase transaction
+        // Save purchase transaction with pending status
         saveTransaction({
           hash: purchaseResult.transactionHash,
           type: 'purchase',
           amount: fldAmount,
           timestamp: Date.now(),
-          status: 'success',
+          status: 'pending',
           from: account.address,
           to: PRESALE_CONTRACT_ADDRESS,
         }, account.address);
 
-        // Set successful transaction result
+        // Set transaction as submitted immediately for UI feedback
         setLastTransaction({
           success: true,
           hash: purchaseResult.transactionHash,
           type: 'purchase',
           amount: fldAmount,
           tokenSymbol: 'FLD',
+          status: 'submitted',
         });
 
-        toast({
-          title: "Purchase Successful!",
-          description: `Successfully purchased ${fldAmount} FLD tokens with ${tokenAmount} ${tokenSymbol}`,
+        // Wait for purchase confirmation
+        const purchaseReceipt = await waitForReceipt({
+          client,
+          chain: POLYGON_CHAIN,
+          transactionHash: purchaseResult.transactionHash,
         });
+
+        const isSuccess = purchaseReceipt.status === 'success';
+
+        // Update transaction in storage
+        updateTransactionStatus(account.address, purchaseResult.transactionHash, {
+          status: isSuccess ? 'success' : 'failed',
+          blockNumber: Number(purchaseReceipt.blockNumber),
+          gasUsed: purchaseReceipt.gasUsed?.toString(),
+        });
+
+        // Update transaction result with confirmation
+        setLastTransaction({
+          success: isSuccess,
+          hash: purchaseResult.transactionHash,
+          type: 'purchase',
+          amount: fldAmount,
+          tokenSymbol: 'FLD',
+          status: isSuccess ? 'confirmed' : 'failed',
+          blockNumber: Number(purchaseReceipt.blockNumber),
+          confirmations: 1,
+        });
+
+        if (isSuccess) {
+          toast({
+            title: "Purchase Successful!",
+            description: `Successfully purchased ${fldAmount} FLD tokens with ${tokenAmount} ${tokenSymbol}`,
+          });
+        } else {
+          throw new Error('Purchase transaction reverted');
+        }
         
-        return true;
+        return isSuccess;
       } else {
         // For native token purchases (ETH, MATIC, BNB, etc.)
         toast({
@@ -171,6 +223,7 @@ export const useTokenPurchase = () => {
         success: false,
         type: 'purchase',
         error: errorMessage,
+        status: 'failed',
       });
 
       toast({
