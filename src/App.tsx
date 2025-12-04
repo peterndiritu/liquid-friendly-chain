@@ -3,10 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { ThirdwebProvider } from "thirdweb/react";
 import { ThemeProvider } from "next-themes";
-import LoadingScreen from "@/components/LoadingScreen";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Technology from "./pages/Technology";
@@ -25,30 +23,11 @@ import DEX from "./pages/DEX";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (isLoading) {
-      document.body.classList.add('loading');
-    } else {
-      document.body.classList.remove('loading');
-    }
-  }, [isLoading]);
-
   return (
     <ThirdwebProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
           <TooltipProvider>
-            <LoadingScreen isLoading={isLoading} />
             <Toaster />
             <Sonner />
             <BrowserRouter>
