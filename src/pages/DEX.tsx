@@ -13,6 +13,7 @@ import AirdropProgressCard from "@/components/AirdropProgressCard";
 import USDTCollectionTracker from "@/components/USDTCollectionTracker";
 import IntegratedPurchaseWidget from "@/components/IntegratedPurchaseWidget";
 import TransactionConfirmationModal from "@/components/TransactionConfirmationModal";
+import TokenContractInfo from "@/components/TokenContractInfo";
 import { useTokenBalances } from "@/hooks/useTokenBalances";
 import { useSalesProgress } from "@/hooks/useSalesProgress";
 import { useAirdropProgress } from "@/hooks/useAirdropProgress";
@@ -120,7 +121,12 @@ return (
             </div>  
           </div>  
           <NetworkSwitcher />  
-        </div>  
+        </div>
+
+        {/* Token Contract Info */}
+        <div className="mb-8 animate-fade-in">
+          <TokenContractInfo />
+        </div>
 
         {/* USDT Collection Tracker */}  
         <div className="mb-8 animate-fade-in">  
