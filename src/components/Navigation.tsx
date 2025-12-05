@@ -21,7 +21,7 @@ const Navigation = () => {
           />
           <div>
             <h1 className="text-xl font-bold gradient-text">Fluid Network</h1>
-            <p className="text-xs text-muted-foreground">FLD Token</p>
+            <p className="text-xs text-muted-foreground">FLUID Token</p>
           </div>
         </Link>
         

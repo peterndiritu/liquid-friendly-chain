@@ -120,7 +120,7 @@ export const useTokenPurchase = () => {
 
         toast({
           title: "Approval Successful",
-          description: "Now purchasing FLD tokens...",
+          description: "Now purchasing FLUID tokens...",
         });
 
         // Step 2: Buy tokens from presale contract
@@ -184,7 +184,7 @@ export const useTokenPurchase = () => {
         if (isSuccess) {
           toast({
             title: "Purchase Successful!",
-            description: `Successfully purchased ${fldAmount} FLD tokens with ${tokenAmount} ${tokenSymbol}`,
+            description: `Successfully purchased ${fldAmount} FLUID tokens with ${tokenAmount} ${tokenSymbol}`,
           });
         } else {
           throw new Error('Purchase transaction reverted');

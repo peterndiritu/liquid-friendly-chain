@@ -24,7 +24,7 @@ const TermsOfService = () => {
     {
       id: "token-purchase",
       title: "4. Token Purchase Terms",
-      content: "FLD tokens are utility tokens with no guaranteed value. Token purchases are final and non-refundable. The value of tokens may fluctuate significantly. Tokens are not securities and do not represent ownership, equity, or voting rights in any entity."
+      content: "FLUID tokens are utility tokens with no guaranteed value. Token purchases are final and non-refundable. The value of tokens may fluctuate significantly. Tokens are not securities and do not represent ownership, equity, or voting rights in any entity."
     },
     {
       id: "risk-disclosures",

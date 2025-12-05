@@ -150,7 +150,7 @@ export const useAirdropClaim = () => {
       if (isSuccess) {
         toast({
           title: "Airdrop Claimed!",
-          description: `Successfully claimed ${claimableAmount} FLD tokens`,
+          description: `Successfully claimed ${claimableAmount} FLUID tokens`,
         });
       } else {
         throw new Error('Claim transaction reverted');

@@ -67,7 +67,7 @@ const TokenContractInfo = () => {
     <div className="p-4 rounded-lg bg-card border">
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-muted-foreground">FLD Token Contract</span>
+          <span className="text-sm font-medium text-muted-foreground">FLUID Token Contract</span>
           <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
             Polygon
           </span>

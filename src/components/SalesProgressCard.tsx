@@ -60,7 +60,7 @@ const SalesProgressCard = ({ data }: SalesProgressCardProps) => {
           )}
         </CardTitle>
         <CardDescription>
-          Track the FLD token presale in real-time
+          Track the FLUID token presale in real-time
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -99,7 +99,7 @@ const SalesProgressCard = ({ data }: SalesProgressCardProps) => {
           <div className="p-4 rounded-lg bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="w-4 h-4 text-purple-500" />
-              <p className="text-xs text-muted-foreground">FLD Sold</p>
+              <p className="text-xs text-muted-foreground">FLUID Sold</p>
             </div>
             <p className="text-2xl font-bold text-purple-500">
               {formatNumber(totalFLDSold)}
