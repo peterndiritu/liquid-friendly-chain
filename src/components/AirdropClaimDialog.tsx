@@ -44,10 +44,10 @@ const AirdropClaimDialog = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Gift className="h-5 w-5 text-primary" />
-            Claim FLD Airdrop
+            Claim FLUID Airdrop
           </DialogTitle>
           <DialogDescription>
-            Check your eligibility and claim your FLD tokens
+            Check your eligibility and claim your FLUID tokens
           </DialogDescription>
         </DialogHeader>
 
@@ -56,7 +56,7 @@ const AirdropClaimDialog = ({
             <Alert className="border-primary/50">
               <CheckCircle2 className="h-4 w-4 text-primary" />
               <AlertDescription>
-                You have already claimed your airdrop of {claimableAmount} FLD tokens!
+                You have already claimed your airdrop of {claimableAmount} FLUID tokens!
               </AlertDescription>
             </Alert>
           ) : isEligible ? (

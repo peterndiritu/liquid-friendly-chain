@@ -68,7 +68,7 @@ const Footer = () => {
               <img src={fluidLogo} alt="Fluid Network" className="w-12 h-12" />
               <div>
                 <h3 className="text-xl font-bold gradient-text">Fluid Network</h3>
-                <p className="text-sm text-muted-foreground">FLD Token</p>
+                <p className="text-sm text-muted-foreground">FLUID Token</p>
               </div>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md leading-relaxed">

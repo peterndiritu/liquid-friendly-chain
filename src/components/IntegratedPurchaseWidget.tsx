@@ -47,7 +47,7 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
       <CardHeader>
         <CardTitle className="text-2xl gradient-text flex items-center gap-2">
           <ShoppingCart className="w-6 h-6" />
-          Buy FLD Tokens
+          Buy FLUID Tokens
         </CardTitle>
         <CardDescription>Select your preferred payment method and amount</CardDescription>
       </CardHeader>
@@ -150,11 +150,11 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
               </div>
               <div>
                 <p className="text-3xl font-bold text-primary">{calculateFLD()}</p>
-                <p className="text-xs text-muted-foreground">FLD Tokens</p>
+                <p className="text-xs text-muted-foreground">FLUID Tokens</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">Price per FLD</p>
+              <p className="text-sm text-muted-foreground">Price per FLUID</p>
               <p className="font-semibold text-foreground">${FLD_PRICE_USD}</p>
             </div>
           </div>

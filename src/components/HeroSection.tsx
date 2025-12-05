@@ -48,7 +48,7 @@ const HeroSection = () => {
             className="button-glow animate-glow-pulse px-8 py-4 text-lg"
             onClick={handleBuyClick}
           >
-            Buy FLD Tokens
+            Buy FLUID Tokens
           </Button>
           <Button 
             size="lg" 
@@ -74,7 +74,7 @@ const HeroSection = () => {
           </Card>
           <Card className="card-glow p-6 text-center">
             <div className="text-3xl font-bold gradient-text">10M</div>
-            <p className="text-sm text-muted-foreground mt-2">Total FLD Supply</p>
+            <p className="text-sm text-muted-foreground mt-2">Total FLUID Supply</p>
           </Card>
           <Card className="card-glow p-6 text-center">
             <div className="text-3xl font-bold gradient-text">Multi-Chain</div>

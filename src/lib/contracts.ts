@@ -1,12 +1,12 @@
-// Smart Contract Configuration for FLD Token and Airdrop
+// Smart Contract Configuration for FLUID Token and Airdrop
 // Deployed on Polygon Mainnet (Chain ID: 137)
 
-export const FLD_TOKEN_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Fluid Token (FLD) on Polygon
+export const FLD_TOKEN_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // FLUID Token on Polygon
 export const AIRDROP_CONTRACT_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Placeholder
 export const PRESALE_CONTRACT_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Placeholder
 export const USDT_CONTRACT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"; // Polygon USDT
 
-// FLD Token Price (in USD)
+// FLUID Token Price (in USD)
 export const FLD_PRICE_USD = 1.00;
 
 // Minimum and Maximum purchase amounts (in MATIC)
@@ -16,7 +16,7 @@ export const MAX_PURCHASE_MATIC = 10;
 // Sale Configuration
 export const SALE_HARD_CAP = 1000000; // $1M USDT
 export const SALE_SOFT_CAP = 100000; // $100K USDT
-export const TOTAL_AIRDROP_ALLOCATION = 3000000; // 3M FLD tokens
+export const TOTAL_AIRDROP_ALLOCATION = 3000000; // 3M FLUID tokens
 
 // Simplified ERC20 ABI for token operations
 export const ERC20_ABI = [

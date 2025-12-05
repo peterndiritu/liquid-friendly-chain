@@ -32,6 +32,7 @@ const TokenIcon = ({ symbol, size = "md", className }: TokenIconProps) => {
     USDT: <DollarSign className={cn(iconSize, "text-green-500", className)} />,
     USDC: <DollarSign className={cn(iconSize, "text-blue-600", className)} />,
     FLD: <Droplets className={cn(iconSize, "text-primary", className)} />,
+    FLUID: <Droplets className={cn(iconSize, "text-primary", className)} />,
   };
 
   return iconMap[symbol] || <Coins className={cn(iconSize, "text-muted-foreground", className)} />;

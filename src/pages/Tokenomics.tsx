@@ -21,11 +21,11 @@ const Tokenomics = () => {
   };
 
   const tokenDistribution = [
-    { category: "Public Sale", percentage: 40, amount: "4M FLD", color: "bg-blue-500" },
-    { category: "Community Rewards", percentage: 30, amount: "3M FLD", color: "bg-indigo-500" },
-    { category: "FLD Reserved & Development", percentage: 10, amount: "1M FLD", color: "bg-purple-500" },
-    { category: "Marketing and Liquidity", percentage: 10, amount: "1M FLD", color: "bg-yellow-500" },
-    { category: "Team & Advisors", percentage: 10, amount: "1M FLD", color: "bg-green-500" }
+    { category: "Public Sale", percentage: 40, amount: "4M FLUID", color: "bg-blue-500" },
+    { category: "Community Rewards", percentage: 30, amount: "3M FLUID", color: "bg-indigo-500" },
+    { category: "FLUID Reserved & Development", percentage: 10, amount: "1M FLUID", color: "bg-purple-500" },
+    { category: "Marketing and Liquidity", percentage: 10, amount: "1M FLUID", color: "bg-yellow-500" },
+    { category: "Team & Advisors", percentage: 10, amount: "1M FLUID", color: "bg-green-500" }
   ];
 
   const stakingRewards = [
@@ -39,7 +39,7 @@ const Tokenomics = () => {
     {
       icon: Zap,
       title: "Transaction Fees",
-      description: "FLD tokens are used to pay for all network transaction fees with discounted rates for holders."
+      description: "FLUID tokens are used to pay for all network transaction fees with discounted rates for holders."
     },
     {
       icon: Shield,
@@ -64,7 +64,7 @@ const Tokenomics = () => {
     {
       icon: Lock,
       title: "Collateral",
-      description: "Use FLD as collateral for lending, borrowing, and other DeFi applications within the ecosystem."
+      description: "Use FLUID as collateral for lending, borrowing, and other DeFi applications within the ecosystem."
     }
   ];
 
@@ -79,16 +79,16 @@ const Tokenomics = () => {
               <span className="gradient-text">Tokenomics</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8">
-              Discover the economic model behind FLD token with sustainable rewards, governance rights, and ecosystem utility
+              Discover the economic model behind FLUID token with sustainable rewards, governance rights, and ecosystem utility
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="button-glow animate-glow-pulse"
-                onClick={handleBuyClick}
-              >
-                Buy FLD Tokens
-              </Button>
+                <Button 
+                  size="lg" 
+                  className="button-glow animate-glow-pulse"
+                  onClick={handleBuyClick}
+                >
+                  Buy FLUID Tokens
+                </Button>
               <Button size="lg" variant="outline" className="border-primary/50 text-primary hover:bg-primary/10">
                 Economic Whitepaper
               </Button>
@@ -160,7 +160,7 @@ const Tokenomics = () => {
                     <span>12 month linear</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
-                    <span>FLD Reserved & Development</span>
+                    <span>FLUID Reserved & Development</span>
                     <span>36 month linear</span>
                   </div>
                   <div className="flex justify-between p-3 bg-muted/20 rounded-lg">
@@ -209,7 +209,7 @@ const Tokenomics = () => {
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-4 gradient-text">Staking Rewards</h2>
               <p className="text-xl text-muted-foreground">
-                Earn passive income by staking FLD tokens with flexible lock-up periods
+                Earn passive income by staking FLUID tokens with flexible lock-up periods
               </p>
             </div>
 

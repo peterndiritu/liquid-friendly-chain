@@ -100,8 +100,8 @@ return (
         <span className="text-sm font-medium text-primary">Decentralized Exchange</span>  
       </div>  
       <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">  
-        Trade & Manage FLD  
-      </h1>  
+        Trade & Manage FLUID  
+      </h1>
       <p className="text-lg text-muted-foreground max-w-2xl mx-auto">  
         Buy tokens, claim airdrops, and track your transactions all in one place  
       </p>  
@@ -178,7 +178,7 @@ return (
                   Claim Airdrop  
                 </CardTitle>  
                 <CardDescription>  
-                  {isEligible ? `${claimableAmount} FLD available` : 'Check eligibility'}  
+                  {isEligible ? `${claimableAmount} FLUID available` : 'Check eligibility'}  
                 </CardDescription>  
               </CardHeader>  
               <CardContent>  
@@ -190,8 +190,8 @@ return (
                     </p>  
                     {isEligible && !isClaimed && (  
                       <p className="text-xs text-muted-foreground mt-1">  
-                        Claim {claimableAmount} FLD tokens  
-                      </p>  
+                        Claim {claimableAmount} FLUID tokens  
+                      </p>
                     )}  
                   </div>  
                   <Button   

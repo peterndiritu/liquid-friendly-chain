@@ -106,7 +106,7 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Coins className="w-5 h-5 text-primary" />
-            Buy FLD Tokens
+            Buy FLUID Tokens
           </DialogTitle>
           <DialogDescription>
             Purchase FLD tokens on {chainName || 'current network'}
@@ -162,10 +162,10 @@ const PurchaseModal = ({ open, onOpenChange, onPurchase, isLoading }: PurchaseMo
           <div className="rounded-lg bg-primary/5 border border-primary/10 p-4 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">You will receive:</span>
-              <span className="font-bold text-primary">{fldAmount} FLD</span>
+              <span className="font-bold text-primary">{fldAmount} FLUID</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Price per FLD:</span>
+              <span className="text-muted-foreground">Price per FLUID:</span>
               <span className="font-semibold">${FLD_PRICE_USD}</span>
             </div>
             <div className="flex justify-between text-sm">
