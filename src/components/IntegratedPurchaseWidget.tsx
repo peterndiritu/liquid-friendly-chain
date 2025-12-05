@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import TokenCard from "./TokenCard";
 import TokenIcon from "./TokenIcon";
-import { PAYMENT_TOKENS, MIN_PURCHASE_USD } from "@/lib/tokenData";
+import ChainSelector from "./ChainSelector";
+import { CHAINS, MIN_PURCHASE_USD, Token, Chain } from "@/lib/tokenData";
 import { FLD_PRICE_USD } from "@/lib/contracts";
-import { ArrowDownUp, ChevronDown, Loader2, ShoppingCart } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowDownUp, Loader2, ShoppingCart } from "lucide-react";
 
 interface IntegratedPurchaseWidgetProps {
   onPurchase: (tokenAmount: number, tokenSymbol: string) => Promise<void>;
@@ -17,11 +16,14 @@ interface IntegratedPurchaseWidgetProps {
 }
 
 const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseWidgetProps) => {
-  const [selectedToken, setSelectedToken] = useState(PAYMENT_TOKENS.primary[1]); // BNB default
+  const [selectedChain, setSelectedChain] = useState<Chain>(CHAINS[1]); // BSC default
+  const [selectedToken, setSelectedToken] = useState<Token>(CHAINS[1].tokens[0]); // BNB default
   const [usdAmount, setUsdAmount] = useState<string>("100");
-  const [showMore, setShowMore] = useState(false);
 
-  const allTokens = [...PAYMENT_TOKENS.primary, ...PAYMENT_TOKENS.secondary];
+  // When chain changes, select the first (native) token
+  useEffect(() => {
+    setSelectedToken(selectedChain.tokens[0]);
+  }, [selectedChain]);
 
   const calculateFLD = () => {
     const usd = parseFloat(usdAmount) || 0;
@@ -49,53 +51,35 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
           <ShoppingCart className="w-6 h-6" />
           Buy FLUID Tokens
         </CardTitle>
-        <CardDescription>Select your preferred payment method and amount</CardDescription>
+        <CardDescription>Select your preferred network and payment token</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Select Payment Method */}
-        <div className="space-y-3">
-          <Label className="text-base font-semibold">Select Payment Method</Label>
-          
-          {/* Primary Tokens Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            {PAYMENT_TOKENS.primary.map((token) => (
+        {/* Chain Selector */}
+        <div className="space-y-2">
+          <Label className="text-base font-semibold">Select Network</Label>
+          <ChainSelector
+            chains={CHAINS}
+            selectedChain={selectedChain}
+            onSelectChain={setSelectedChain}
+          />
+        </div>
+
+        {/* Token Grid */}
+        <div className="space-y-2">
+          <Label className="text-base font-semibold">Select Token</Label>
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+            {selectedChain.tokens.map((token) => (
               <TokenCard
                 key={token.symbol}
                 symbol={token.symbol}
                 name={token.name}
-                network={token.network}
+                logo={token.logo}
                 isSelected={selectedToken.symbol === token.symbol}
                 onClick={() => setSelectedToken(token)}
+                isNative={token.isNative}
               />
             ))}
           </div>
-
-          {/* More Tokens Collapsible */}
-          <Collapsible open={showMore} onOpenChange={setShowMore}>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
-                <span className="text-sm font-medium text-muted-foreground">+ Other Cryptos</span>
-                <ChevronDown className={cn(
-                  "w-4 h-4 text-muted-foreground transition-transform",
-                  showMore && "rotate-180"
-                )} />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-3 mt-3">
-              <div className="grid grid-cols-2 gap-3">
-                {PAYMENT_TOKENS.secondary.map((token) => (
-                  <TokenCard
-                    key={token.symbol}
-                    symbol={token.symbol}
-                    name={token.name}
-                    network={token.network}
-                    isSelected={selectedToken.symbol === token.symbol}
-                    onClick={() => setSelectedToken(token)}
-                  />
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
         </div>
 
         {/* USD Amount Input */}
@@ -113,11 +97,11 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
               value={usdAmount}
               onChange={(e) => setUsdAmount(e.target.value)}
               placeholder="100"
-              className="pl-7 pr-20 h-12 text-lg font-semibold bg-muted/50 border-border/50"
+              className="pl-7 pr-24 h-12 text-lg font-semibold bg-muted/50 border-border/50"
               min={MIN_PURCHASE_USD}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-              <TokenIcon symbol={selectedToken.symbol} />
+              <TokenIcon symbol={selectedToken.symbol} logo={selectedToken.logo} size="md" />
               <span className="text-sm font-semibold text-foreground">
                 {selectedToken.symbol}
               </span>
@@ -142,11 +126,11 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
 
         {/* You Receive Section */}
         <div className="space-y-2">
-          <Label className="text-base font-semibold">You Receive (FLD)</Label>
+          <Label className="text-base font-semibold">You Receive (FLUID)</Label>
           <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/20">
-                <TokenIcon symbol="FLD" size="lg" />
+                <TokenIcon symbol="FLUID" size="lg" />
               </div>
               <div>
                 <p className="text-3xl font-bold text-primary">{calculateFLD()}</p>
