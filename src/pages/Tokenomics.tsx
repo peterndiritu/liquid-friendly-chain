@@ -106,11 +106,11 @@ const Tokenomics = () => {
                   <p className="text-muted-foreground">Total Supply</p>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-4xl font-bold gradient-text">$2.50</div>
+                  <div className="text-4xl font-bold gradient-text">$1.00</div>
                   <p className="text-muted-foreground">Current Price</p>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-4xl font-bold gradient-text">$25M</div>
+                  <div className="text-4xl font-bold gradient-text">$10M</div>
                   <p className="text-muted-foreground">Market Cap</p>
                 </div>
                 <div className="space-y-2">
