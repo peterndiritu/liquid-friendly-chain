@@ -69,17 +69,16 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
 
   return (
     <Card className="purchase-widget-card animate-fade-in">
-      <CardHeader>
-        <div className="flex items-center justify-between">
+      <CardHeader className="p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <CardTitle className="text-2xl gradient-text flex items-center gap-2">
-              <ShoppingCart className="w-6 h-6" />
+            <CardTitle className="text-lg sm:text-xl md:text-2xl gradient-text flex items-center gap-2">
+              <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
               Buy FLUID Tokens
             </CardTitle>
-            <CardDescription>Select your preferred network and payment token</CardDescription>
+            <CardDescription className="text-xs md:text-sm">Select your preferred network and payment token</CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            {/* Live/Estimated Badge */}
             <Badge 
               variant={usingFallback ? "secondary" : "default"}
               className={usingFallback ? "" : "bg-green-500/20 text-green-500 border-green-500/30"}
@@ -87,7 +86,6 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
               <Zap className="w-3 h-3 mr-1" />
               {usingFallback ? "Estimated" : "Live"}
             </Badge>
-            {/* Refresh Button */}
             <Button
               variant="ghost"
               size="icon"
@@ -100,18 +98,16 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
             </Button>
           </div>
         </div>
-        {/* Last Updated */}
         {lastUpdated && (
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+          <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground mt-1">
             <Clock className="w-3 h-3" />
             Updated {formatLastUpdated()}
           </div>
         )}
       </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Chain Selector */}
-        <div className="space-y-2">
-          <Label className="text-base font-semibold">Select Network</Label>
+      <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6 pt-0 md:pt-0">
+        <div className="space-y-1.5 md:space-y-2">
+          <Label className="text-sm md:text-base font-semibold">Select Network</Label>
           <ChainSelector
             chains={CHAINS}
             selectedChain={selectedChain}
@@ -119,10 +115,9 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
           />
         </div>
 
-        {/* Token Grid */}
-        <div className="space-y-2">
-          <Label className="text-base font-semibold">Select Token</Label>
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+        <div className="space-y-1.5 md:space-y-2">
+          <Label className="text-sm md:text-base font-semibold">Select Token</Label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
             {tokensWithPrices.map((token) => (
               <TokenCard
                 key={token.symbol}
@@ -141,8 +136,8 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
         </div>
 
         {/* USD Amount Input */}
-        <div className="space-y-2">
-          <Label htmlFor="usd-amount" className="text-base font-semibold">
+        <div className="space-y-1.5 md:space-y-2">
+          <Label htmlFor="usd-amount" className="text-sm md:text-base font-semibold">
             You Pay
           </Label>
           <div className="relative">
@@ -155,17 +150,17 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
               value={usdAmount}
               onChange={(e) => setUsdAmount(e.target.value)}
               placeholder="100"
-              className="pl-7 pr-24 h-12 text-lg font-semibold bg-muted/50 border-border/50"
+              className="pl-7 pr-20 md:pr-24 h-10 md:h-12 text-base md:text-lg font-semibold bg-muted/50 border-border/50"
               min={MIN_PURCHASE_USD}
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <div className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 md:gap-2">
               <TokenIcon symbol={selectedToken?.symbol || ''} logo={selectedToken?.logo} size="md" />
-              <span className="text-sm font-semibold text-foreground">
+              <span className="text-xs md:text-sm font-semibold text-foreground">
                 {selectedToken?.symbol}
               </span>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] md:text-xs text-muted-foreground">
             💡 Min: ${MIN_PURCHASE_USD} • Approx. {calculateTokenAmount()} {selectedToken?.symbol} @ ${selectedToken?.livePrice?.toLocaleString(undefined, { maximumFractionDigits: 2 })}
           </p>
         </div>
@@ -183,21 +178,21 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
         </div>
 
         {/* You Receive Section */}
-        <div className="space-y-2">
-          <Label className="text-base font-semibold">You Receive (FLUID)</Label>
-          <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/20">
+        <div className="space-y-1.5 md:space-y-2">
+          <Label className="text-sm md:text-base font-semibold">You Receive (FLUID)</Label>
+          <div className="flex items-center justify-between p-3 md:p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/20">
                 <TokenIcon symbol="FLUID" size="lg" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-primary">{calculateFLD()}</p>
-                <p className="text-xs text-muted-foreground">FLUID Tokens</p>
+                <p className="text-2xl md:text-3xl font-bold text-primary">{calculateFLD()}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">FLUID Tokens</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">Price per FLUID</p>
-              <p className="font-semibold text-foreground">${FLD_PRICE_USD}</p>
+              <p className="text-[10px] md:text-sm text-muted-foreground">Price per FLUID</p>
+              <p className="text-sm md:text-base font-semibold text-foreground">${FLD_PRICE_USD}</p>
             </div>
           </div>
         </div>
@@ -206,7 +201,7 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
         <Button
           onClick={handlePurchase}
           disabled={isLoading || !isValidAmount}
-          className="w-full h-14 text-lg font-semibold buy-button-gradient hover:scale-105 transition-transform"
+          className="w-full h-12 md:h-14 text-base md:text-lg font-semibold buy-button-gradient hover:scale-105 transition-transform"
           size="lg"
         >
           {isLoading ? (

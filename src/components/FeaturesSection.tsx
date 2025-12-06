@@ -64,41 +64,41 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-12 md:py-16 lg:py-24 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        <div className="text-center mb-8 md:mb-12 lg:mb-16 animate-fade-in">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
             Core <span className="gradient-text">Features</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             Fluid Network combines cutting-edge blockchain technology with innovative features to create the most advanced decentralized ecosystem.
           </p>
         </div>
 
         {/* Main Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12 lg:mb-16">
           {coreFeatures.map((feature, index) => (
-            <Card key={index} className="card-glow p-8 text-center group hover:scale-105 transition-transform duration-300 animate-fade-in">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6 group-hover:bg-primary/20 transition-colors">
-                <feature.icon className="w-8 h-8 text-primary" />
+            <Card key={index} className="card-glow p-4 md:p-6 lg:p-8 text-center group hover:scale-[1.02] transition-transform duration-300 animate-fade-in">
+              <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full bg-primary/10 mb-4 md:mb-6 group-hover:bg-primary/20 transition-colors">
+                <feature.icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-primary" />
               </div>
-              <div className="text-lg font-bold gradient-text mb-2">{feature.subtitle}</div>
-              <h3 className="text-xl font-semibold mb-4 text-foreground">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              <div className="text-sm md:text-base lg:text-lg font-bold gradient-text mb-1 md:mb-2">{feature.subtitle}</div>
+              <h3 className="text-base md:text-lg lg:text-xl font-semibold mb-2 md:mb-4 text-foreground">{feature.title}</h3>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
             </Card>
           ))}
         </div>
 
         {/* Additional Features */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 lg:gap-6">
           {additionalFeatures.map((feature, index) => (
-            <Card key={index} className="card-glow p-6 text-center group hover:scale-105 transition-transform duration-300 animate-fade-in">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4 group-hover:bg-primary/20 transition-colors">
-                <feature.icon className="w-6 h-6 text-primary" />
+            <Card key={index} className="card-glow p-3 md:p-4 lg:p-6 text-center group hover:scale-[1.02] transition-transform duration-300 animate-fade-in">
+              <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 mb-2 md:mb-4 group-hover:bg-primary/20 transition-colors">
+                <feature.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
               </div>
-              <div className="text-sm font-bold gradient-text mb-1">{feature.subtitle}</div>
-              <h4 className="text-sm font-medium text-foreground">{feature.title}</h4>
+              <div className="text-xs md:text-sm font-bold gradient-text mb-0.5 md:mb-1">{feature.subtitle}</div>
+              <h4 className="text-xs md:text-sm font-medium text-foreground">{feature.title}</h4>
             </Card>
           ))}
         </div>
