@@ -10,43 +10,77 @@ interface TokenPrices {
 }
 
 const COINCAP_IDS: Record<string, string> = {
+  // Native tokens
   ETH: "ethereum",
   BNB: "binance-coin",
   MATIC: "polygon",
   POL: "polygon",
   AVAX: "avalanche",
-  OP: "optimism",
-  ARB: "arbitrum",
   FTM: "fantom",
   CRO: "crypto-com-coin",
   CELO: "celo",
   GLMR: "moonbeam",
-  XDAI: "xdai",
-  ETH_AURORA: "ethereum",
-  MNT: "mantle",
+  
+  // Stablecoins
   USDT: "tether",
   USDC: "usd-coin",
+  DAI: "dai",
+  BUSD: "binance-usd",
+  cUSD: "celo-dollar",
+  
+  // Wrapped & other tokens
+  WBTC: "wrapped-bitcoin",
+  WETH: "ethereum",
+  WAVAX: "avalanche",
+  CAKE: "pancakeswap-token",
+  ARB: "arbitrum",
+  OP: "optimism",
+  
+  // L2/Bridge tokens
+  MNT: "mantle",
+  XDAI: "xdai",
+  ETH_AURORA: "ethereum",
+  
+  // Project token (uses fallback)
   FLD: "fluid",
+  FLUID: "fluid",
 };
 
 const FALLBACK_PRICES: TokenPrices = {
-  POL: { price: 0.45, change24h: 0 },
-  MATIC: { price: 0.45, change24h: 0 },
-  ETH: { price: 2650, change24h: 0 },
+  // Native tokens
+  ETH: { price: 3500, change24h: 0 },
+  BNB: { price: 645, change24h: 0 },
+  POL: { price: 0.50, change24h: 0 },
+  MATIC: { price: 0.50, change24h: 0 },
+  AVAX: { price: 42, change24h: 0 },
+  FTM: { price: 0.85, change24h: 0 },
+  CRO: { price: 0.14, change24h: 0 },
+  CELO: { price: 0.80, change24h: 0 },
+  GLMR: { price: 0.35, change24h: 0 },
+  
+  // Stablecoins
   USDT: { price: 1.00, change24h: 0 },
   USDC: { price: 1.00, change24h: 0 },
-  BNB: { price: 315, change24h: 0 },
-  AVAX: { price: 28, change24h: 0 },
-  OP: { price: 1.85, change24h: 0 },
-  ARB: { price: 0.72, change24h: 0 },
-  FTM: { price: 0.68, change24h: 0 },
-  CRO: { price: 0.09, change24h: 0 },
-  CELO: { price: 0.65, change24h: 0 },
-  GLMR: { price: 0.22, change24h: 0 },
-  XDAI: { price: 1.00, change24h: 0 },
+  DAI: { price: 1.00, change24h: 0 },
+  BUSD: { price: 1.00, change24h: 0 },
+  cUSD: { price: 1.00, change24h: 0 },
+  
+  // Wrapped & other tokens
+  WBTC: { price: 100000, change24h: 0 },
+  WETH: { price: 3500, change24h: 0 },
+  WAVAX: { price: 42, change24h: 0 },
+  CAKE: { price: 2.80, change24h: 0 },
+  ARB: { price: 0.95, change24h: 0 },
+  OP: { price: 2.10, change24h: 0 },
+  
+  // L2/Bridge tokens
   MNT: { price: 0.72, change24h: 0 },
+  XDAI: { price: 1.00, change24h: 0 },
+  ETH_AURORA: { price: 3500, change24h: 0 },
+  
+  // Project token
   FLD: { price: 1.00, change24h: 0 },
-  ETH_AURORA: { price: 2650, change24h: 0 },
+  FLUID: { price: 1.00, change24h: 0 },
 };
 
 export const useTokenPrices = (symbols: string[]) => {
@@ -65,16 +99,28 @@ export const useTokenPrices = (symbols: string[]) => {
         return;
       }
 
-      // Get CoinCap IDs for the requested symbols
-      const ids = symbols
-        .map(symbol => COINCAP_IDS[symbol])
-        .filter(Boolean)
-        .join(',');
+      // Get unique CoinCap IDs for the requested symbols
+      const uniqueIds = [...new Set(
+        symbols
+          .map(symbol => COINCAP_IDS[symbol])
+          .filter(Boolean)
+      )];
       
-      if (!ids) {
+      if (uniqueIds.length === 0) {
+        // No valid IDs, use fallback prices
+        const fallbackMap: TokenPrices = {};
+        symbols.forEach(symbol => {
+          if (FALLBACK_PRICES[symbol]) {
+            fallbackMap[symbol] = FALLBACK_PRICES[symbol];
+          }
+        });
+        setPrices(fallbackMap);
+        setUsingFallback(true);
         setIsLoading(false);
         return;
       }
+
+      const ids = uniqueIds.join(',');
 
       // Fetch real-time prices directly from CoinCap API
       const response = await fetch(`https://api.coincap.io/v2/assets?ids=${ids}`);
@@ -86,16 +132,22 @@ export const useTokenPrices = (symbols: string[]) => {
       // Map CoinCap data to our format
       const priceMap: TokenPrices = {};
       
+      // Build a reverse lookup from CoinCap ID to price data
+      const coinCapPrices: Record<string, { price: number; change24h: number }> = {};
       data.forEach((asset: any) => {
-        const symbol = Object.keys(COINCAP_IDS).find(
-          key => COINCAP_IDS[key] === asset.id
-        );
-        
-        if (symbol) {
-          priceMap[symbol] = {
-            price: parseFloat(asset.priceUsd),
-            change24h: parseFloat(asset.changePercent24Hr || '0'),
-          };
+        coinCapPrices[asset.id] = {
+          price: parseFloat(asset.priceUsd),
+          change24h: parseFloat(asset.changePercent24Hr || '0'),
+        };
+      });
+      
+      // Map each symbol to its price
+      symbols.forEach(symbol => {
+        const coinCapId = COINCAP_IDS[symbol];
+        if (coinCapId && coinCapPrices[coinCapId]) {
+          priceMap[symbol] = coinCapPrices[coinCapId];
+        } else if (FALLBACK_PRICES[symbol]) {
+          priceMap[symbol] = FALLBACK_PRICES[symbol];
         }
       });
       
@@ -148,6 +200,7 @@ export const useTokenPrices = (symbols: string[]) => {
     if (symbols.length > 0) {
       fetchPrices();
       
+      // Auto-refresh every 30 seconds
       const interval = setInterval(fetchPrices, 30000);
       
       return () => clearInterval(interval);

@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import TokenCard from "./TokenCard";
 import TokenIcon from "./TokenIcon";
 import ChainSelector from "./ChainSelector";
 import { CHAINS, MIN_PURCHASE_USD, Token, Chain } from "@/lib/tokenData";
 import { FLD_PRICE_USD } from "@/lib/contracts";
-import { ArrowDownUp, Loader2, ShoppingCart } from "lucide-react";
+import { usePurchaseWidgetPrices, TokenWithPrice } from "@/hooks/usePurchaseWidgetPrices";
+import { ArrowDownUp, Loader2, ShoppingCart, RefreshCw, Zap, Clock } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 interface IntegratedPurchaseWidgetProps {
   onPurchase: (tokenAmount: number, tokenSymbol: string) => Promise<void>;
@@ -17,12 +20,26 @@ interface IntegratedPurchaseWidgetProps {
 
 const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseWidgetProps) => {
   const [selectedChain, setSelectedChain] = useState<Chain>(CHAINS[1]); // BSC default
-  const [selectedToken, setSelectedToken] = useState<Token>(CHAINS[1].tokens[0]); // BNB default
+  const [selectedTokenSymbol, setSelectedTokenSymbol] = useState<string>(CHAINS[1].tokens[0].symbol);
   const [usdAmount, setUsdAmount] = useState<string>("100");
+
+  // Fetch live prices for current chain
+  const { 
+    tokensWithPrices, 
+    isLoading: pricesLoading, 
+    lastUpdated, 
+    refresh, 
+    usingFallback 
+  } = usePurchaseWidgetPrices(selectedChain);
+
+  // Get selected token with live price
+  const selectedToken = useMemo(() => {
+    return tokensWithPrices.find(t => t.symbol === selectedTokenSymbol) || tokensWithPrices[0];
+  }, [tokensWithPrices, selectedTokenSymbol]);
 
   // When chain changes, select the first (native) token
   useEffect(() => {
-    setSelectedToken(selectedChain.tokens[0]);
+    setSelectedTokenSymbol(selectedChain.tokens[0].symbol);
   }, [selectedChain]);
 
   const calculateFLD = () => {
@@ -32,7 +49,8 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
 
   const calculateTokenAmount = () => {
     const usd = parseFloat(usdAmount) || 0;
-    return (usd / selectedToken.price).toFixed(6);
+    const price = selectedToken?.livePrice || selectedToken?.price || 1;
+    return (usd / price).toFixed(6);
   };
 
   const handlePurchase = async () => {
@@ -44,14 +62,51 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
 
   const isValidAmount = parseFloat(usdAmount) >= MIN_PURCHASE_USD;
 
+  const formatLastUpdated = () => {
+    if (!lastUpdated) return null;
+    return formatDistanceToNow(lastUpdated, { addSuffix: true });
+  };
+
   return (
     <Card className="purchase-widget-card animate-fade-in">
       <CardHeader>
-        <CardTitle className="text-2xl gradient-text flex items-center gap-2">
-          <ShoppingCart className="w-6 h-6" />
-          Buy FLUID Tokens
-        </CardTitle>
-        <CardDescription>Select your preferred network and payment token</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-2xl gradient-text flex items-center gap-2">
+              <ShoppingCart className="w-6 h-6" />
+              Buy FLUID Tokens
+            </CardTitle>
+            <CardDescription>Select your preferred network and payment token</CardDescription>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* Live/Estimated Badge */}
+            <Badge 
+              variant={usingFallback ? "secondary" : "default"}
+              className={usingFallback ? "" : "bg-green-500/20 text-green-500 border-green-500/30"}
+            >
+              <Zap className="w-3 h-3 mr-1" />
+              {usingFallback ? "Estimated" : "Live"}
+            </Badge>
+            {/* Refresh Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={refresh}
+              disabled={pricesLoading}
+              className="h-8 w-8"
+              title="Refresh prices"
+            >
+              <RefreshCw className={`w-4 h-4 ${pricesLoading ? 'animate-spin' : ''}`} />
+            </Button>
+          </div>
+        </div>
+        {/* Last Updated */}
+        {lastUpdated && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+            <Clock className="w-3 h-3" />
+            Updated {formatLastUpdated()}
+          </div>
+        )}
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Chain Selector */}
@@ -68,15 +123,18 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
         <div className="space-y-2">
           <Label className="text-base font-semibold">Select Token</Label>
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-            {selectedChain.tokens.map((token) => (
+            {tokensWithPrices.map((token) => (
               <TokenCard
                 key={token.symbol}
                 symbol={token.symbol}
                 name={token.name}
                 logo={token.logo}
-                isSelected={selectedToken.symbol === token.symbol}
-                onClick={() => setSelectedToken(token)}
+                isSelected={selectedTokenSymbol === token.symbol}
+                onClick={() => setSelectedTokenSymbol(token.symbol)}
                 isNative={token.isNative}
+                livePrice={token.livePrice}
+                change24h={token.change24h}
+                isLoadingPrice={pricesLoading}
               />
             ))}
           </div>
@@ -101,14 +159,14 @@ const IntegratedPurchaseWidget = ({ onPurchase, isLoading }: IntegratedPurchaseW
               min={MIN_PURCHASE_USD}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-              <TokenIcon symbol={selectedToken.symbol} logo={selectedToken.logo} size="md" />
+              <TokenIcon symbol={selectedToken?.symbol || ''} logo={selectedToken?.logo} size="md" />
               <span className="text-sm font-semibold text-foreground">
-                {selectedToken.symbol}
+                {selectedToken?.symbol}
               </span>
             </div>
           </div>
           <p className="text-xs text-muted-foreground">
-            💡 Min: ${MIN_PURCHASE_USD} • Approx. {calculateTokenAmount()} {selectedToken.symbol}
+            💡 Min: ${MIN_PURCHASE_USD} • Approx. {calculateTokenAmount()} {selectedToken?.symbol} @ ${selectedToken?.livePrice?.toLocaleString(undefined, { maximumFractionDigits: 2 })}
           </p>
         </div>
 
