@@ -28,13 +28,6 @@ const Tokenomics = () => {
     { category: "Team & Advisors", percentage: 10, amount: "1M FLUID", color: "bg-green-500" }
   ];
 
-  const stakingRewards = [
-    { duration: "30 Days", apy: "12%", multiplier: "1x", risk: "Low" },
-    { duration: "90 Days", apy: "18%", multiplier: "1.5x", risk: "Medium" },
-    { duration: "180 Days", apy: "25%", multiplier: "2x", risk: "Medium" },
-    { duration: "365 Days", apy: "35%", multiplier: "3x", risk: "High" }
-  ];
-
   const utilities = [
     {
       icon: Zap,
@@ -203,41 +196,34 @@ const Tokenomics = () => {
           </div>
         </section>
 
-        {/* Staking Rewards */}
+        {/* Future Plans (Staking moved here) */}
         <section className="py-20 px-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 gradient-text">Staking Rewards</h2>
-              <p className="text-xl text-muted-foreground">
-                Earn passive income by staking FLUID tokens with flexible lock-up periods
-              </p>
-            </div>
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="text-4xl font-bold mb-4 gradient-text">Future Plans</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+              Staking will be introduced in future upgrades, offering flexible lock periods, multipliers, and reward tiers to incentivize long-term ecosystem participation.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <Card className="card-glow p-6 text-center">
+                <div className="mb-4">
+                  <div className="text-2xl font-bold gradient-text mb-2">Flexible Locks</div>
+                  <div className="text-sm text-muted-foreground">Multiple lock durations for user choice and commitment.</div>
+                </div>
+              </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {stakingRewards.map((tier, index) => (
-                <Card key={index} className="card-glow p-6 text-center animate-fade-in hover:scale-105 transition-transform">
-                  <div className="mb-4">
-                    <div className="text-2xl font-bold gradient-text mb-2">{tier.apy}</div>
-                    <div className="text-lg font-semibold">{tier.duration}</div>
-                  </div>
-                  <div className="space-y-2 mb-4">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Multiplier:</span>
-                      <span className="font-semibold text-primary">{tier.multiplier}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Risk Level:</span>
-                      <span className={`font-semibold ${
-                        tier.risk === 'Low' ? 'text-green-500' :
-                        tier.risk === 'Medium' ? 'text-yellow-500' : 'text-red-500'
-                      }`}>{tier.risk}</span>
-                    </div>
-                  </div>
-                  <Button className="w-full button-glow">
-                    Stake Now
-                  </Button>
-                </Card>
-              ))}
+              <Card className="card-glow p-6 text-center">
+                <div className="mb-4">
+                  <div className="text-2xl font-bold gradient-text mb-2">Reward Multipliers</div>
+                  <div className="text-sm text-muted-foreground">Incentives scale with longer-term commitments.</div>
+                </div>
+              </Card>
+
+              <Card className="card-glow p-6 text-center">
+                <div className="mb-4">
+                  <div className="text-2xl font-bold gradient-text mb-2">Governance Integration</div>
+                  <div className="text-sm text-muted-foreground">Stakers will receive governance privileges to shape protocol direction.</div>
+                </div>
+              </Card>
             </div>
           </div>
         </section>
