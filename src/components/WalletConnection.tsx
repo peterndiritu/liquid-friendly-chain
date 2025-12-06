@@ -4,10 +4,10 @@ import { client } from "@/lib/thirdweb";
 
 const WalletConnection = () => {
   return (
-    <Card className="card-glow max-w-md mx-auto p-6 mt-12 animate-scale-in">
-      <div className="text-center space-y-4">
-        <p className="text-sm text-muted-foreground">Connect your wallet to get started</p>
-        <p className="text-xs text-muted-foreground">
+    <Card className="card-glow max-w-md mx-auto p-4 md:p-6 mt-6 md:mt-10 animate-scale-in">
+      <div className="text-center space-y-3 md:space-y-4">
+        <p className="text-xs md:text-sm text-muted-foreground">Connect your wallet to get started</p>
+        <p className="text-[10px] md:text-xs text-muted-foreground">
           Support for MetaMask, Coinbase Wallet, WalletConnect, and more
         </p>
         <div className="flex justify-center">
