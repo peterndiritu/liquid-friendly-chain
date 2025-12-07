@@ -25,6 +25,7 @@ import { useAirdropClaim } from "@/hooks/useAirdropClaim";
 import { useTransactionHistory } from "@/hooks/useTransactionHistory";
 import { useTokenPrices } from "@/hooks/useTokenPrices";
 import { Gift, ArrowRightLeft } from "lucide-react";
+import { AdvancedSwap } from "@/components/AdvancedSwap"
 
 const DEX = () => {
   const [airdropDialogOpen, setAirdropDialogOpen] = useState(false);
