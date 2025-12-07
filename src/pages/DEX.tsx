@@ -137,10 +137,9 @@ const DEX = () => {
             <span className="text-sm font-medium text-primary">Decentralized Exchange</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
-            Trade & Manage FLD
-          </h1>
+            Trade | Swap | Manage FLUID,Other Tokens and coins </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Buy tokens, claim airdrops, and track your transactions all in one place
+            Buy Tokens, Claim Airdrops, Swap and track your transactions all in one place
           </p>
         </section>
 
@@ -173,7 +172,7 @@ const DEX = () => {
                 <TokenBalances />
               </div>
 
-              {/* Right Column: FLD Stats & Actions */}
+              {/* Right Column: Fluid Stats & Actions */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Stats Dashboard */}
                 <DexStats 
@@ -190,10 +189,10 @@ const DEX = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <ShoppingCart className="w-5 h-5 text-primary" />
-                    Buy FLD Tokens
+                    Buy FLUID Tokens
                   </CardTitle>
                   <CardDescription>
-                    Purchase FLD tokens with BNB
+                    Purchase FLUID tokens with Any coin or token
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -224,7 +223,7 @@ const DEX = () => {
                     Claim Airdrop
                   </CardTitle>
                   <CardDescription>
-                    {isEligible ? `${claimableAmount} FLD available` : 'Check eligibility'}
+                    {isEligible ? `${claimableAmount} Fluid available` : 'Check eligibility'}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
