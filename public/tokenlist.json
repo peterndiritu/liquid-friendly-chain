@@ -1,0 +1,49 @@
+{
+  "name": "FLUID Default List",
+  "logoURI": "",
+  "timestamp": "2025-01-01T00:00:00+00:00",
+  "tokens": [
+    {
+      "chainId": 137,
+      "symbol": "USDT",
+      "name": "Tether USD",
+      "decimals": 6,
+      "address": "YOUR_USDT_ADDRESS"
+    },
+    {
+      "chainId": 137,
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "decimals": 6,
+      "address": "YOUR_USDC_ADDRESS"
+    },
+    {
+      "chainId": 137,
+      "symbol": "DAI",
+      "name": "Dai Stablecoin",
+      "decimals": 18,
+      "address": "YOUR_DAI_ADDRESS"
+    },
+    {
+      "chainId": 137,
+      "symbol": "FLUID",
+      "name": "Fluid Token",
+      "decimals": 18,
+      "address": "YOUR_FLUID_ADDRESS"
+    },
+    {
+      "chainId": 137,
+      "symbol": "WBTC",
+      "name": "Wrapped Bitcoin",
+      "decimals": 8,
+      "address": "YOUR_WBTC_ADDRESS"
+    },
+    {
+      "chainId": 137,
+      "symbol": "WETH",
+      "name": "Wrapped Ether",
+      "decimals": 18,
+      "address": "YOUR_WETH_ADDRESS"
+    }
+  ]
+}
