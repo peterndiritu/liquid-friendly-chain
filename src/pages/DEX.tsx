@@ -101,10 +101,10 @@ const DEX = () => {
             <span className="text-xs md:text-sm font-medium text-primary">Decentralized Exchange</span>
           </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 gradient-text">
-            Trade & Manage FLUID
+            Trade & Manage FLUID and Other Cryptos
           </h1>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Buy tokens, claim airdrops, and track your transactions all in one place
+            Buy tokens, claim airdrops, swap and track your transactions all in one place
           </p>
         </section>
 
