@@ -104,7 +104,7 @@ export default function AdvancedSwap({ onSwap }: AdvancedSwapProps) {
     const load = async () => {
       try {
         const provider = new ethers.BrowserProvider((window as any).ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const decimalsObj: Record<string, number> = {};
         const balancesObj: Record<string, string> = {};
 
@@ -146,7 +146,7 @@ export default function AdvancedSwap({ onSwap }: AdvancedSwapProps) {
     try {
       setPriceLoading(true);
       const provider = new ethers.BrowserProvider((window as any).ethereum);
-      const signer = provider.getSigner();
+      const signer = await provider.getSigner();
       const router = new ethers.Contract(ROUTER_ADDRESS, ROUTER_ABI, signer);
 
       const inDecimals = decimalsMap[tokenIn.address] ?? (tokenIn.symbol === "USDT" ? 6 : 18);
@@ -195,14 +195,13 @@ export default function AdvancedSwap({ onSwap }: AdvancedSwapProps) {
         const deadline = Math.floor(Date.now() / 1000) + deadlineMinutes * 60;
         // compute minOut with slippage
         const minOut = BigInt(outWei) * BigInt(100 - Math.floor(slippage)) / BigInt(100);
-        const callData = router.estimateGas.swapExactTokensForTokens(
+        const gasEst = await router.swapExactTokensForTokens.estimateGas(
           amountInWei,
           minOut,
           path,
           account,
           deadline
         );
-        const gasEst = await callData;
         // convert to human-friendly
         setEstimatedGas(gasEst.toString());
       } catch (err) {
@@ -236,7 +235,7 @@ export default function AdvancedSwap({ onSwap }: AdvancedSwapProps) {
 
     try {
       const provider = new ethers.BrowserProvider((window as any).ethereum);
-      const signer = provider.getSigner();
+      const signer = await provider.getSigner();
       const token = new ethers.Contract(tokenIn.address, ERC20_ABI, signer);
 
       // approve a large number if approveMax (infinite approve pattern)
@@ -273,7 +272,7 @@ export default function AdvancedSwap({ onSwap }: AdvancedSwapProps) {
     setIsSwapping(true);
     try {
       const provider = new ethers.BrowserProvider((window as any).ethereum);
-      const signer = provider.getSigner();
+      const signer = await provider.getSigner();
       const router = new ethers.Contract(ROUTER_ADDRESS, ROUTER_ABI, signer);
 
       const inDecimals = decimalsMap[tokenIn.address] ?? (tokenIn.symbol === "USDT" ? 6 : 18);
@@ -299,7 +298,7 @@ export default function AdvancedSwap({ onSwap }: AdvancedSwapProps) {
       const deadline = Math.floor(Date.now() / 1000) + deadlineMinutes * 60;
 
       // perform swap (gas estimation + sending)
-      const estimate = await router.estimateGas.swapExactTokensForTokens(
+      const estimate = await router.swapExactTokensForTokens.estimateGas(
         amountInWei,
         minOut,
         path,
