@@ -4,16 +4,21 @@ import { Button } from "@/components/ui/button";
 import fluidLogo from "@/assets/fluid-logo.png";
 import ExploreDropdown from "./ExploreDropdown";
 import { ThemeToggle } from "./ThemeToggle";
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useActiveAccount } from "thirdweb/react";
 import { client } from "@/lib/thirdweb";
-import { ArrowRightLeft, Menu, X } from "lucide-react";
+import { ArrowRightLeft, Menu, X, Shield } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { DEPLOYER_ADDRESS } from "@/lib/fluidContract";
 
 const Navigation = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  const account = useActiveAccount();
+  
+  // Check if connected wallet is the deployer/owner
+  const isAdmin = account?.address?.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase();
 
   const MobileNav = () => (
     <div className="flex flex-col space-y-4 p-4">
@@ -29,6 +34,19 @@ const Navigation = () => {
         <ArrowRightLeft className="w-4 h-4 mr-2" />
         Trade
       </Button>
+      {isAdmin && (
+        <Button
+          variant="outline"
+          onClick={() => {
+            navigate('/admin');
+            setOpen(false);
+          }}
+          className="w-full justify-start"
+        >
+          <Shield className="w-4 h-4 mr-2" />
+          Admin
+        </Button>
+      )}
       <div className="pt-4 border-t border-border">
         <ConnectButton
           client={client}
@@ -67,6 +85,16 @@ const Navigation = () => {
             <ArrowRightLeft className="w-4 h-4 mr-2" />
             Trade
           </Button>
+          {isAdmin && (
+            <Button
+              variant="outline"
+              onClick={() => navigate('/admin')}
+              className="border-primary/50"
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              Admin
+            </Button>
+          )}
           <ConnectButton
             client={client}
             connectModal={{

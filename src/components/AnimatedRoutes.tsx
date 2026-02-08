@@ -13,6 +13,7 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import StartBuilding from "@/pages/StartBuilding";
 import DEX from "@/pages/DEX";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -33,6 +34,7 @@ const AnimatedRoutes = () => {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/start-building" element={<StartBuilding />} />
         <Route path="/dex" element={<DEX />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
