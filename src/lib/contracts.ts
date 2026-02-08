@@ -1,9 +1,9 @@
 // Smart Contract Configuration for FLUID Token and Airdrop
 // Deployed on Polygon Mainnet (Chain ID: 137)
 
-export const FLD_TOKEN_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // FLUID Token on Polygon
-export const AIRDROP_CONTRACT_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Placeholder
-export const PRESALE_CONTRACT_ADDRESS = "0xec9123Aa60651ceee7c0E084c884Cd33478c92a5"; // Placeholder
+export const FLD_TOKEN_ADDRESS = "0xAE28Aff9E9D6362C4d83817CF0cb37b907bB495A"; // FLUID Token on Polygon
+export const AIRDROP_CONTRACT_ADDRESS = "0xAE28Aff9E9D6362C4d83817CF0cb37b907bB495A"; // Placeholder
+export const PRESALE_CONTRACT_ADDRESS = "0xAE28Aff9E9D6362C4d83817CF0cb37b907bB495A"; // Placeholder
 export const USDT_CONTRACT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"; // Polygon USDT
 
 // FLUID Token Price (in USD)
@@ -11,7 +11,7 @@ export const FLD_PRICE_USD = 1.00;
 
 // Minimum and Maximum purchase amounts (in MATIC)
 export const MIN_PURCHASE_MATIC = 0.1;
-export const MAX_PURCHASE_MATIC = 10;
+export const MAX_PURCHASE_MATIC = 10000000000000;
 
 // Sale Configuration
 export const SALE_HARD_CAP = 1000000; // $1M USDT
