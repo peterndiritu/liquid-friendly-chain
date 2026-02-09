@@ -1,30 +1,36 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import fluidLogo from "@/assets/fluid-logo.png";
-import ExploreDropdown from "./ExploreDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import { ConnectButton, useActiveAccount } from "thirdweb/react";
 import { client } from "@/lib/thirdweb";
-import { ArrowRightLeft, Menu, X, Shield } from "lucide-react";
+import { ArrowRightLeft, Menu, X, Shield, BookOpen } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 import { DEPLOYER_ADDRESS } from "@/lib/fluidContract";
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const account = useActiveAccount();
   
-  // Check if connected wallet is the deployer/owner
   const isAdmin = account?.address?.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase();
 
   const MobileNav = () => (
     <div className="flex flex-col space-y-4 p-4">
-      <ExploreDropdown />
       <Button
-        variant="outline"
+        variant="ghost"
+        onClick={() => {
+          navigate('/resources');
+          setOpen(false);
+        }}
+        className="w-full justify-start"
+      >
+        <BookOpen className="w-4 h-4 mr-2" />
+        Docs
+      </Button>
+      <Button
+        variant="ghost"
         onClick={() => {
           navigate('/dex');
           setOpen(false);
@@ -36,7 +42,7 @@ const Navigation = () => {
       </Button>
       {isAdmin && (
         <Button
-          variant="outline"
+          variant="ghost"
           onClick={() => {
             navigate('/admin');
             setOpen(false);
@@ -50,9 +56,7 @@ const Navigation = () => {
       <div className="pt-4 border-t border-border">
         <ConnectButton
           client={client}
-          connectModal={{
-            size: "compact",
-          }}
+          connectModal={{ size: "compact" }}
           theme="dark"
         />
       </div>
@@ -60,46 +64,34 @@ const Navigation = () => {
   );
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-3 md:py-4 bg-background/80 backdrop-blur-lg border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-3 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2 md:space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
+        <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
           <img 
             src={fluidLogo} 
-            alt="Fluid Network Logo" 
-            className="w-8 h-8 md:w-10 md:h-10 animate-float"
+            alt="Fluid" 
+            className="w-8 h-8"
           />
-          <div>
-            <h1 className="text-lg md:text-xl font-bold gradient-text">Fluid Network</h1>
-            <p className="text-[10px] md:text-xs text-muted-foreground">FLUID Token</p>
-          </div>
+          <span className="text-lg font-semibold text-foreground">Fluid</span>
         </Link>
         
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-4">
-          <ExploreDropdown />
-          <ThemeToggle />
-          <Button
-            variant="outline"
-            onClick={() => navigate('/dex')}
-          >
-            <ArrowRightLeft className="w-4 h-4 mr-2" />
+        <div className="hidden md:flex items-center space-x-2">
+          <Button variant="ghost" size="sm" onClick={() => navigate('/resources')}>
+            Docs
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/dex')}>
             Trade
           </Button>
           {isAdmin && (
-            <Button
-              variant="outline"
-              onClick={() => navigate('/admin')}
-              className="border-primary/50"
-            >
-              <Shield className="w-4 h-4 mr-2" />
+            <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
               Admin
             </Button>
           )}
+          <ThemeToggle />
           <ConnectButton
             client={client}
-            connectModal={{
-              size: "compact",
-            }}
+            connectModal={{ size: "compact" }}
             theme="dark"
           />
         </div>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import WalletConnection from "@/components/WalletConnection";
 import DexStats from "@/components/DexStats";
 import TransactionHistory from "@/components/TransactionHistory";
 import AirdropClaimDialog from "@/components/AirdropClaimDialog";
@@ -26,6 +25,8 @@ import { useTokenPurchase } from "@/hooks/useTokenPurchase";
 import { useAirdropClaim } from "@/hooks/useAirdropClaim";
 import { useTransactionHistory } from "@/hooks/useTransactionHistory";
 import { useTokenPrices } from "@/hooks/useTokenPrices";
+import { ConnectButton } from "thirdweb/react";
+import { client } from "@/lib/thirdweb";
 import { Gift, ArrowRightLeft, ShoppingCart, Wallet, BarChart3, History } from "lucide-react";
 
 const DEX = () => {
@@ -202,7 +203,18 @@ const DEX = () => {
 
         {/* Wallet Connection Check */}
         {!isConnected ? (
-          <WalletConnection />
+          <Card className="max-w-md mx-auto p-6">
+            <div className="text-center space-y-4">
+              <p className="text-muted-foreground">Connect your wallet to get started</p>
+              <div className="flex justify-center">
+                <ConnectButton
+                  client={client}
+                  connectModal={{ size: "wide", title: "Connect Wallet" }}
+                  theme="dark"
+                />
+              </div>
+            </div>
+          </Card>
         ) : (
           <>
             {/* Network Switcher & Wallet Info */}
